@@ -40,7 +40,8 @@ extern char Prog_En_Marche[8] ;
 extern int CapteurActivated;
 
 
-void Creer_Ecran_Acceuil(void) {
+void Creer_Ecran_Acceuil(void)
+{
 	lv_obj_clean(lv_scr_act());
 	Dessine_Horloge();
 	Bouton_Marche();
@@ -58,7 +59,8 @@ void Creer_Ecran_Acceuil(void) {
 }
 
 
-void Dessine_Horloge(void) {
+void Dessine_Horloge(void)
+{
 	static lv_style_t style, styleD;
 	lv_style_init(&style);
 
@@ -105,7 +107,8 @@ void Dessine_Horloge(void) {
 
 }
 
-void Change_Heure(char Heu, char Min, char Sec) {
+void Change_Heure(char Heu, char Min, char Sec)
+{
 	char buf[40];
 
 	lv_snprintf(buf, sizeof(buf), "%02d:%02d:%02d", Heu, Min, Sec);
@@ -113,7 +116,8 @@ void Change_Heure(char Heu, char Min, char Sec) {
 
 }
 
-void Print_Val(char Val) {
+void Print_Val(char Val)
+{
 	char buf[40];
 
 	lv_snprintf(buf, sizeof(buf), "Valeur : %2d", Val);
@@ -121,7 +125,8 @@ void Print_Val(char Val) {
 
 }
 
-void Change_Date(char Jour, char Mois, char Annee) {
+void Change_Date(char Jour, char Mois, char Annee)
+{
 	char buf[40];
 
 	lv_snprintf(buf, sizeof(buf), "%02d/%02d/%02d", Jour, Mois, Annee);
@@ -129,7 +134,8 @@ void Change_Date(char Jour, char Mois, char Annee) {
 
 }
 
-void Bouton_Reglage_Heure(void) {
+void Bouton_Reglage_Heure(void)
+{
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	lv_style_init(&style);
@@ -199,7 +205,8 @@ void Bouton_Reglage_Heure(void) {
 
 }
 
-void event_handler_Bouton_Regl_Heure(lv_event_t *e) {
+void event_handler_Bouton_Regl_Heure(lv_event_t *e)
+{
 	lv_event_code_t code = lv_event_get_code(e);
 
 	if (code == LV_EVENT_PRESSED) {
@@ -207,7 +214,8 @@ void event_handler_Bouton_Regl_Heure(lv_event_t *e) {
 	}
 }
 
-void Bouton_Reglage_Prog(void) {
+void Bouton_Reglage_Prog(void)
+{
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	lv_style_init(&style);
@@ -277,7 +285,8 @@ void Bouton_Reglage_Prog(void) {
 
 }
 
-void event_handler_Bouton_Regl_Prog(lv_event_t *e) {
+void event_handler_Bouton_Regl_Prog(lv_event_t *e)
+{
 	lv_event_code_t code = lv_event_get_code(e);
 
 	if (code == LV_EVENT_PRESSED) {
@@ -285,7 +294,8 @@ void event_handler_Bouton_Regl_Prog(lv_event_t *e) {
 	}
 }
 
-void Bouton_Marche(void) {
+void Bouton_Marche(void)
+{
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	lv_style_init(&style);
@@ -355,15 +365,18 @@ void Bouton_Marche(void) {
 
 }
 
-void event_handler_Bouton_Marche(lv_event_t *e) {
+void event_handler_Bouton_Marche(lv_event_t *e)
+{
 	lv_event_code_t code = lv_event_get_code(e);
 
-	if (code == LV_EVENT_PRESSED) {
+	if (code == LV_EVENT_PRESSED)
+	{
 		Transi_0to2 = 1;
 	}
 }
 
-void Bouton_Mode_Prog(void) {
+void Bouton_Mode_Prog(void)
+{
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	lv_style_init(&style);
@@ -433,17 +446,20 @@ void Bouton_Mode_Prog(void) {
 
 }
 
-void event_handler_Bouton_Mode_Prog(lv_event_t *e) {
+void event_handler_Bouton_Mode_Prog(lv_event_t *e)
+{
 	lv_event_code_t code = lv_event_get_code(e);
 
-	if (code == LV_EVENT_PRESSED) {
+	if (code == LV_EVENT_PRESSED)
+	{
 		Transi_0to3 = 1 ;
 	}
 }
 
 
 
-void Creer_Label_ProgActif(void) {
+void Creer_Label_ProgActif(void)
+{
 	int Boucle;
 	char Texte[7];
 	lv_style_t style_Txt;
@@ -462,15 +478,12 @@ void Creer_Label_ProgActif(void) {
 			lv_label_set_text(LabelProgActif[Boucle], Texte);
 			lv_obj_add_style(LabelProgActif[Boucle], &style_Txt, 0);
 			lv_obj_align(LabelProgActif[Boucle], LV_ALIGN_CENTER, (-180 + 50 * Boucle), -120);
-
 		}
-
-
 	}
-
 }
 
-void Bouton_Mode_Capteur(void) {
+void Bouton_Mode_Capteur(void)
+{
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	lv_style_init(&style);
@@ -540,11 +553,13 @@ void Bouton_Mode_Capteur(void) {
 
 }
 
-void event_handler_Bouton_Mode_Capteur(lv_event_t *e) {
+void event_handler_Bouton_Mode_Capteur(lv_event_t *e)
+{
 	lv_event_code_t code = lv_event_get_code(e);
 
-	if (code == LV_EVENT_PRESSED) {
-		Transi_0to4 = 1 ;
+	if (code == LV_EVENT_PRESSED)
+	{
+		Transi_0to4 = 1;
 	}
 }
 

@@ -54,23 +54,8 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef* hrtc)
 void MX_RTC_Init(void)
 {
 
-  /* USER CODE BEGIN RTC_Init 0 */
-
-  /* USER CODE END RTC_Init 0 */
-
   RTC_TimeTypeDef sTime = {0};
   RTC_DateTypeDef sDate = {0};
-  //RTC_AlarmTypeDef sAlarm = {0};
-
-  /* USER CODE BEGIN RTC_Init 1 */
-
-  /* USER CODE END RTC_Init 1 */
-
-  /** Initialize RTC Only
-  */
-
-  //RTC_Clock();
-
 
   RTC_F746.Instance = RTC;
   RTC_F746.Init.HourFormat = RTC_HOURFORMAT_24;
@@ -79,14 +64,11 @@ void MX_RTC_Init(void)
   RTC_F746.Init.OutPut = RTC_OUTPUT_DISABLE;
   RTC_F746.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
   RTC_F746.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+
   if (HAL_RTC_Init(&RTC_F746) != HAL_OK)
   {
-    Error_Handler();
+	  Error_Handler();
   }
-
-  /* USER CODE BEGIN Check_RTC_BKUP */
-
-  /* USER CODE END Check_RTC_BKUP */
 
   /** Initialize RTC and set the Time and Date
   */
@@ -95,57 +77,25 @@ void MX_RTC_Init(void)
   sTime.Seconds = 0x50;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sTime.StoreOperation = RTC_STOREOPERATION_RESET;
+
   if (HAL_RTC_SetTime(&RTC_F746, &sTime, RTC_FORMAT_BCD) != HAL_OK)
   {
     Error_Handler();
   }
+
   sDate.WeekDay = RTC_WEEKDAY_FRIDAY;
   sDate.Month = RTC_MONTH_NOVEMBER;
   sDate.Date = 0x8;
   sDate.Year = 0x24;
+
   if (HAL_RTC_SetDate(&RTC_F746, &sDate, RTC_FORMAT_BCD) != HAL_OK)
   {
     Error_Handler();
   }
-
-//  /** Enable the Alarm A
-//  */
-//  sAlarm.AlarmTime.Hours = 0x0;
-//  sAlarm.AlarmTime.Minutes = 0x0;
-//  sAlarm.AlarmTime.Seconds = 0x0;
-//  sAlarm.AlarmTime.SubSeconds = 0x0;
-//  sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-//  sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
-//  sAlarm.AlarmMask = RTC_ALARMMASK_NONE;
-//  sAlarm.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_ALL;
-//  sAlarm.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
-//  sAlarm.AlarmDateWeekDay = 0x1;
-//  sAlarm.Alarm = RTC_ALARM_A;
-//  if (HAL_RTC_SetAlarm(&RTC_F746, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-
-//  /** Enable the Alarm B
-//  */
-//  sAlarm.Alarm = RTC_ALARM_B;
-//  if (HAL_RTC_SetAlarm(&RTC_F746, &sAlarm, RTC_FORMAT_BCD) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-
-//  /** Enable the TimeStamp
-//  */
-//  if (HAL_RTCEx_SetTimeStamp(&RTC_F746, RTC_TIMESTAMPEDGE_RISING, RTC_TIMESTAMPPIN_POS1) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-//  /* USER CODE BEGIN RTC_Init 2 */
-
-//  /* USER CODE END RTC_Init 2 */
-
 }
 
+
+/////////////////////////// A l'air d'être inutile, n'est appelé nulle part
 void RTC_CalendarConfig(void)
 {
   RTC_DateTypeDef sdatestructure;
@@ -199,5 +149,5 @@ void RTC_CalendarShow(uint8_t *showtime, uint8_t *showdate)
   HAL_RTC_GetTime(&RTC_F746, &Time_RTCF746, RTC_FORMAT_BIN);
   /* Get the RTC current Date */
   HAL_RTC_GetDate(&RTC_F746, &Date_RTCF746, RTC_FORMAT_BIN);
-  }
 
+}

@@ -58,10 +58,10 @@ int main(void)
 	Stop_Tempo();
 	Init_TIM3_Pompe_1sec();
 
-	/* on relit les données de programmation en mémoire Flash */
+	// Relecture des données de programmation stockés en Flash
 	Lire_Data_Prog(&Data_Prog);
 
-	/* Init de la machien à état */
+	// Initialisation de la machine à état
 	Transi_2to0 = 1;
     Etat = 2;
 
@@ -69,7 +69,9 @@ int main(void)
 	{
 		HAL_Delay(100);
         if (Change_Etat() == 1)
+        {
         	Modifie_Etat();
+        }
         else
         {
         	Refresh_Etat();
@@ -78,6 +80,8 @@ int main(void)
 	}
 
 }
+
+
 /*************************************************************/
 /****************Fin du main()********************************/
 /*************************************************************/
@@ -111,6 +115,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLN = 400;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 9;
+
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -147,8 +152,7 @@ void PeriphCommonClock_Config(void)
 {
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
-  /** Initializes the peripherals clock
-  */
+  /** Initializes the peripherals clock */
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC|RCC_PERIPHCLK_SAI2
                               |RCC_PERIPHCLK_CLK48;
   PeriphClkInitStruct.PLLSAI.PLLSAIN = 384;

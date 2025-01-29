@@ -14,7 +14,7 @@ void Init_GPIO(void)
 
 
 
-	// Actrivation des horloges
+	// Activation des horloges
 
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOI_CLK_ENABLE();
@@ -80,21 +80,28 @@ void Init_GPIO(void)
 }
 
 
+
+// Interruption du bouton poussoir
 void EXTI9_5_IRQHandler(void)
 {
-
 	__HAL_GPIO_EXTI_CLEAR_FLAG(GPIO_PIN_6);
 	Poussoir_Start_Appui = 1;
-
 }
 
 
+
+
+// A renommer
 void Allume_Pompe()
 {
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, 1);
 	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, 1);
 }
 
+
+
+
+// A renommer
 void Eteint_Pompe()
 {
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, 0);
