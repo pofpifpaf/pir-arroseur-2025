@@ -1,0 +1,15 @@
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/CMSIS/core/core_cm7.h:2107:22:SCB_InvalidateICache	1
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/CMSIS/core/core_cm7.h:2268:22:SCB_CleanInvalidateDCache	3
+../hal_stm_lvgl/tft/tft.c:112:6:tft_init	1
+../hal_stm_lvgl/tft/tft.c:172:13:ex_disp_flush	6
+../hal_stm_lvgl/tft/tft.c:216:13:ex_disp_clean_dcache	1
+../hal_stm_lvgl/tft/tft.c:225:13:LCD_MspInit	1
+../hal_stm_lvgl/tft/tft.c:293:13:LCD_ClockConfig	1
+../hal_stm_lvgl/tft/tft.c:313:16:LCD_Init	3
+../hal_stm_lvgl/tft/tft.c:372:13:LCD_LayerRgb565Init	1
+../hal_stm_lvgl/tft/tft.c:403:6:LCD_DisplayOn	1
+../hal_stm_lvgl/tft/tft.c:411:6:LCD_DisplayOff	1
+../hal_stm_lvgl/tft/tft.c:419:13:DMA_Config	2
+../hal_stm_lvgl/tft/tft.c:464:13:DMA_TransferComplete	3
+../hal_stm_lvgl/tft/tft.c:495:13:DMA_TransferError	1
+../hal_stm_lvgl/tft/tft.c:505:6:DMA2_Stream0_IRQHandler	1

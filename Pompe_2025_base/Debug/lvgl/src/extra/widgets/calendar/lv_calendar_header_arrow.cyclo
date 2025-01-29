@@ -1,0 +1,8 @@
+../lvgl/src/extra/widgets/calendar/../../../core/lv_obj_style_gen.h:91:26:lv_obj_get_style_pad_top	1
+../lvgl/src/extra/widgets/calendar/../../../core/lv_obj_style_gen.h:97:26:lv_obj_get_style_pad_bottom	1
+../lvgl/src/extra/widgets/calendar/../../../core/lv_obj_style_gen.h:103:26:lv_obj_get_style_pad_left	1
+../lvgl/src/extra/widgets/calendar/../../../core/lv_obj_style_gen.h:109:26:lv_obj_get_style_pad_right	1
+../lvgl/src/extra/widgets/calendar/../../../core/lv_obj_style_gen.h:121:26:lv_obj_get_style_pad_column	1
+../lvgl/src/extra/widgets/calendar/../../../core/lv_obj_style_gen.h:127:26:lv_obj_get_style_radius	1
+../lvgl/src/extra/widgets/calendar/lv_calendar_header_arrow.c:43:12:lv_calendar_header_arrow_create	1
+../lvgl/src/extra/widgets/calendar/lv_calendar_header_arrow.c:90:13:month_event_cb	4

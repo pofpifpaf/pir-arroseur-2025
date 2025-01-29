@@ -1,0 +1,24 @@
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/lvgl/src/hal/../misc/lv_color.h:602:26:lv_color_make	1
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/lvgl/src/hal/../misc/lv_color.h:612:26:lv_color_hex3	1
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/lvgl/src/hal/../misc/lv_color.h:674:26:lv_color_white	1
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/lvgl/src/core/../misc/lv_style.h:425:20:lv_style_set_pad_all	1
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/lvgl/src/core/lv_obj_pos.h:186:20:lv_obj_center	1
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/lvgl/src/core/lv_obj_style.h:92:20:lv_obj_remove_style_all	1
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/lvgl/src/core/lv_disp.h:163:26:lv_scr_act	1
+C:/Users/mahout/Documents/Enseignement/Tutorat -PFE/PIR/PIR Prise_commandee_2024/Pompe_2024_avecRTC&Flash/lvgl/src/lv_api_map.h:35:51:lv_task_handler	1
+../src/Ecran/Ecran_Accueil.c:43:6:Creer_Ecran_Acceuil	1
+../src/Ecran/Ecran_Accueil.c:61:6:Dessine_Horloge	1
+../src/Ecran/Ecran_Accueil.c:108:6:Change_Heure	1
+../src/Ecran/Ecran_Accueil.c:116:6:Print_Val	1
+../src/Ecran/Ecran_Accueil.c:124:6:Change_Date	1
+../src/Ecran/Ecran_Accueil.c:132:6:Bouton_Reglage_Heure	1
+../src/Ecran/Ecran_Accueil.c:202:6:event_handler_Bouton_Regl_Heure	2
+../src/Ecran/Ecran_Accueil.c:210:6:Bouton_Reglage_Prog	1
+../src/Ecran/Ecran_Accueil.c:280:6:event_handler_Bouton_Regl_Prog	2
+../src/Ecran/Ecran_Accueil.c:288:6:Bouton_Marche	1
+../src/Ecran/Ecran_Accueil.c:358:6:event_handler_Bouton_Marche	2
+../src/Ecran/Ecran_Accueil.c:366:6:Bouton_Mode_Prog	1
+../src/Ecran/Ecran_Accueil.c:436:6:event_handler_Bouton_Mode_Prog	2
+../src/Ecran/Ecran_Accueil.c:446:6:Creer_Label_ProgActif	3
+../src/Ecran/Ecran_Accueil.c:473:6:Bouton_Mode_Capteur	1
+../src/Ecran/Ecran_Accueil.c:543:6:event_handler_Bouton_Mode_Capteur	2

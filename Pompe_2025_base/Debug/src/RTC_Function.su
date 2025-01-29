@@ -1,0 +1,4 @@
+../src/RTC_Function.c:26:6:HAL_RTC_MspInit	152	static
+../src/RTC_Function.c:54:6:MX_RTC_Init	40	static
+../src/RTC_Function.c:149:6:RTC_CalendarConfig	40	static
+../src/RTC_Function.c:193:6:RTC_CalendarShow	48	static

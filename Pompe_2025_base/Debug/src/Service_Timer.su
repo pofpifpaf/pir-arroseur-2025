@@ -1,0 +1,8 @@
+../src/Service_Timer.c:24:6:Init_TIM2_Tempo	16	static
+../src/Service_Timer.c:48:6:Run_Tempo	4	static
+../src/Service_Timer.c:61:6:Stop_Tempo	8	static
+../src/Service_Timer.c:72:6:TIM2_IRQHandler	8	static
+../src/Service_Timer.c:85:6:Run_Pompe_1sec	4	static
+../src/Service_Timer.c:97:6:Stop_Pompe_1sec	8	static
+../src/Service_Timer.c:105:6:Init_TIM3_Pompe_1sec	16	static
+../src/Service_Timer.c:120:6:TIM3_IRQHandler	4	static
