@@ -9,6 +9,7 @@
 #include <Ecran_Accueil.h>
 #include <Ecran_Regle_Heure.h>
 #include <Service_GPIO.h>
+#include <Service_UART.h>
 #include <Service_Timer.h>
 #include "hal_stm_lvgl/tft/tft.h"
 #include "stm32746g_discovery_ts.h"
@@ -47,6 +48,8 @@ int main(void)
 	SCB_EnableICache();
 	/* Enable D-Cache */
 	SCB_EnableDCache();
+
+	Init_UART();
 
 
 	Init_GPIO();

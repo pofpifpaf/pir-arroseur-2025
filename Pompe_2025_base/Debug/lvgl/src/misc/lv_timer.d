@@ -1,7 +1,7 @@
 lvgl/src/misc/lv_timer.o: ../lvgl/src/misc/lv_timer.c \
  ../lvgl/src/misc/lv_timer.h ../lvgl/src/misc/../lv_conf_internal.h \
  ../lvgl/src/misc/../lv_conf_kconfig.h \
- C:/Users/mahout/Documents/Enseignement/Tutorat\ -PFE/PIR/PIR\ Prise_commandee_2024/Pompe_2024_avecRTC&Flash/inc/lv_conf.h \
+ C:/Users/adamg/OneDrive/Documents/1travail/INSA/4A/S8/pir/pir-arroseur-2025/Pompe_2025_base/inc/lv_conf.h \
  ../lvgl/src/misc/lv_mem.h ../lvgl/src/misc/lv_log.h \
  ../lvgl/src/misc/lv_types.h ../lvgl/src/misc/lv_ll.h \
  ../lvgl/src/misc/../misc/lv_assert.h \
@@ -26,7 +26,7 @@ lvgl/src/misc/lv_timer.o: ../lvgl/src/misc/lv_timer.c \
 ../lvgl/src/misc/lv_timer.h:
 ../lvgl/src/misc/../lv_conf_internal.h:
 ../lvgl/src/misc/../lv_conf_kconfig.h:
-C:/Users/mahout/Documents/Enseignement/Tutorat\ -PFE/PIR/PIR\ Prise_commandee_2024/Pompe_2024_avecRTC&Flash/inc/lv_conf.h:
+C:/Users/adamg/OneDrive/Documents/1travail/INSA/4A/S8/pir/pir-arroseur-2025/Pompe_2025_base/inc/lv_conf.h:
 ../lvgl/src/misc/lv_mem.h:
 ../lvgl/src/misc/lv_log.h:
 ../lvgl/src/misc/lv_types.h:

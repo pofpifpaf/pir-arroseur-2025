@@ -1,0 +1,3 @@
+../src/Service_UART.c:4:6:USART6_IRQHandler	8	static
+../src/Service_UART.c:14:6:Init_UART	16	static
+../src/Service_UART.c:43:6:HAL_UART_RxCpltCallback	16	static

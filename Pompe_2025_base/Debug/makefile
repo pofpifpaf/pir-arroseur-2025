@@ -102,8 +102,8 @@ all: main-build
 main-build: Pompe_2024_avecRTC.elf secondary-outputs
 
 # Tool invocations
-Pompe_2024_avecRTC.elf Pompe_2024_avecRTC.map: $(OBJS) $(USER_OBJS) C:\Users\mahout\Documents\Enseignement\Tutorat\ -PFE\PIR\PIR\ Prise_commandee_2024\Pompe_2024_avecRTC&Flash\LinkerScript.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Pompe_2024_avecRTC.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\mahout\Documents\Enseignement\Tutorat -PFE\PIR\PIR Prise_commandee_2024\Pompe_2024_avecRTC&Flash\LinkerScript.ld" --specs=nosys.specs -Wl,-Map="Pompe_2024_avecRTC.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Pompe_2024_avecRTC.elf Pompe_2024_avecRTC.map: $(OBJS) $(USER_OBJS) C:\Users\adamg\OneDrive\Documents\1travail\INSA\4A\S8\pir\pir-arroseur-2025\Pompe_2025_base\LinkerScript.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Pompe_2024_avecRTC.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\adamg\OneDrive\Documents\1travail\INSA\4A\S8\pir\pir-arroseur-2025\Pompe_2025_base\LinkerScript.ld" --specs=nosys.specs -Wl,-Map="Pompe_2024_avecRTC.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

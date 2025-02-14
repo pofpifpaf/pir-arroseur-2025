@@ -2,7 +2,7 @@ lvgl/src/hal/lv_hal_indev.o: ../lvgl/src/hal/lv_hal_indev.c \
  ../lvgl/src/hal/../misc/lv_assert.h \
  ../lvgl/src/hal/../misc/../lv_conf_internal.h \
  ../lvgl/src/hal/../misc/../lv_conf_kconfig.h \
- C:/Users/mahout/Documents/Enseignement/Tutorat\ -PFE/PIR/PIR\ Prise_commandee_2024/Pompe_2024_avecRTC&Flash/inc/lv_conf.h \
+ C:/Users/adamg/OneDrive/Documents/1travail/INSA/4A/S8/pir/pir-arroseur-2025/Pompe_2025_base/inc/lv_conf.h \
  ../lvgl/src/hal/../hal/lv_hal_indev.h \
  ../lvgl/src/hal/../hal/../lv_conf_internal.h \
  ../lvgl/src/hal/../hal/../misc/lv_area.h \
@@ -89,7 +89,7 @@ lvgl/src/hal/lv_hal_indev.o: ../lvgl/src/hal/lv_hal_indev.c \
 ../lvgl/src/hal/../misc/lv_assert.h:
 ../lvgl/src/hal/../misc/../lv_conf_internal.h:
 ../lvgl/src/hal/../misc/../lv_conf_kconfig.h:
-C:/Users/mahout/Documents/Enseignement/Tutorat\ -PFE/PIR/PIR\ Prise_commandee_2024/Pompe_2024_avecRTC&Flash/inc/lv_conf.h:
+C:/Users/adamg/OneDrive/Documents/1travail/INSA/4A/S8/pir/pir-arroseur-2025/Pompe_2025_base/inc/lv_conf.h:
 ../lvgl/src/hal/../hal/lv_hal_indev.h:
 ../lvgl/src/hal/../hal/../lv_conf_internal.h:
 ../lvgl/src/hal/../hal/../misc/lv_area.h:

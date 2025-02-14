@@ -1,4 +1,0 @@
-../src/Service_GPIO.c:12:6:Init_GPIO	24	static
-../src/Service_GPIO.c:83:6:EXTI9_5_IRQHandler	4	static
-../src/Service_GPIO.c:92:6:Allume_Pompe	8	static
-../src/Service_GPIO.c:98:6:Eteint_Pompe	8	static

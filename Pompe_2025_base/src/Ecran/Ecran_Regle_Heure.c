@@ -228,8 +228,6 @@ void event_handler_BoutonRetour_Regle_Heure(lv_event_t * e)
 
 static void event_handler_Calendrier(lv_event_t * e)
 {
-
-
 	uint32_t a;
     uint32_t b;
 
@@ -247,7 +245,7 @@ static void event_handler_Calendrier(lv_event_t * e)
 			a = Mois < 3 ? 1 : 0;
 			b = Annee - a;
 
-			JourSemaine=(Jour + (31 * (Mois - 2 + 12 * a) / 12) + b + (b / 4) - (b / 100) + (b / 400)) % 7;
+			JourSemaine = (Jour + (31 * (Mois - 2 + 12 * a) / 12) + b + (b / 4) - (b / 100) + (b / 400)) % 7;
 
 			lv_calendar_set_today_date(calendar, date.year, date.month, date.day);
 
@@ -287,12 +285,6 @@ void event_handler_Bouton_Appliquer(lv_event_t *e) {
 
 	if (code == LV_EVENT_PRESSED) {
 		Transi_1to0 = 1;
-		//UserTimeSet.Min=Minute;
-		//UserTimeSet.Hour=Heure;
-		//UserTimeSet.Year=Annee;
-		//UserTimeSet.Date=Jour;
-		//UserTimeSet.Month=Mois;
-		//DS1307_SetTime(&UserTimeSet);
 
 		  sTime.Hours = Heure;
 		  sTime.Minutes = Minute;

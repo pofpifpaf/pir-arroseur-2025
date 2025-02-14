@@ -63,7 +63,7 @@ void Decrement_Numeprog(void)
 	}
 }
 
-
+// Faire en sorte qu'il écrit pas en flash à chaque fois
 /******************************************************************/
 /* Initialisation des données des programmes                      */
 /* Lecture de la RAM dee la DS1307                                */
@@ -131,19 +131,17 @@ void Stocke_Data_Prog(Data_Prog_Typedef *Data)
 	Write_Byte_Flash(FLASH_USER_START_ADDR, 8 * NumProgMax + 1, (char*)(Tempo));
 }
 
-// Fonction de vérification si on doit allumer ou non la prise
+/******************************************************************/
+/*   Fonction de vérification si on doit allumer ou non la prise */
+/******************************************************************/
 void Verif_Programme()
 {
-		char Marche;
-
 		HAL_RTC_GetTime(&RTC_F746, &Time_RTCF746, RTC_FORMAT_BIN);
 		HAL_RTC_GetDate(&RTC_F746, &Date_RTCF746, RTC_FORMAT_BIN);
 
-		CheckStop(&Data_Prog);
+		calculateStopTime(&Data_Prog);
 
-		Marche = Is_Start(&Data_Prog,Time_RTCF746,Date_RTCF746);
-
-		if (Marche == 1)
+		if (isInProgram(&Data_Prog,Time_RTCF746,Date_RTCF746))
 		{
 			Allume_Pompe();
 		}
@@ -152,14 +150,14 @@ void Verif_Programme()
 			Eteint_Pompe();
 		}
 }
-
-// Fonction de calcul de l'heure et du jour de fin de chaque programme
-void CheckStop(Data_Prog_Typedef* Data)
+/*************************************************************************/
+/*   Fonction de calcul de l'heure et du jour de fin de chaque programme */
+/*************************************************************************/
+void calculateStopTime(Data_Prog_Typedef* Data)
 {
-	int i;
 	int JStop, MStop, HStop, retH, retM;
 
-	for (i = 0; i < NumProgMax; i++)
+	for (int i = 0; i < NumProgMax; i++)
 	{
 		retM = 0;
 		retH = 0;
@@ -187,99 +185,58 @@ void CheckStop(Data_Prog_Typedef* Data)
 	}
 }
 
-// Fonction de vérification pour savoir si l'heure actuelle est comprise dans le programme ou non
-// (Egal = 1 => Dans le programme // Egal = 0 => Hors du programme)
-// à refaire
-char Is_Start(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_DateTypeDef Date_RTCF746)
+
+char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_DateTypeDef Date_RTCF746)
 {
 	int i;
-	char Egal ;
-
-	Egal = 0;
+	char notInProgram = 0;
 
 	for (i = 0 ; i < NumProgMax ; i++)
 	{
 		if (Prog_En_Marche[i] == 1)
 		{
-			// même jour de fin et de début a mettre et jour actuel
-			if ((Data->Jour[i] == Data->Jour_Stop[i]) &&  ((Data->Jour[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0))
+			// On est sur le jour de début et de fin
+			if ((Data->Jour[i] == Data->Jour_Stop[i])
+				&& ((Data->Jour[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0))
 			{
-				// même heure de début et de fin et heure actuelle
-				if ((Data->H_Start[i] == Data->H_Stop[i]) && (Data->H_Start[i] == Time_RTCF746.Hours))
-				{
-					// Vrai si dans le programme
-					if ((Data->M_Start[i] <= Time_RTCF746.Minutes) && (Data->M_Stop[i] > Time_RTCF746.Minutes))
-					{
-						Egal = 1 ;
-					}
-				}
-				// Heure actuelle == Heure de début du programme et Minute actuelle >= Minute de début
-				// Vérification de début
-				else if (Data->H_Start[i] == Time_RTCF746.Hours)
-				{
-					if (Data->M_Start[i] <= Time_RTCF746.Minutes)
-					{
-						Egal = 1 ;
-					}
-				}
-				// Vérification de fin de programme
-				else if (Data->H_Stop[i] == Time_RTCF746.Hours)
-				{
-					if (Data->M_Stop[i] > Time_RTCF746.Minutes)
-					{
-						Egal = 1 ;
-					}
-				}
-				// Si l'heure est comprise entre les deux (à mettre au début à mon avis...)
-				else if ((Data->H_Start[i] < Time_RTCF746.Hours) && (Data->H_Stop[i] > Time_RTCF746.Hours))
-				{
-					Egal = 1 ;
-				}
+				notInProgram = ((Time_RTCF746.Hours > Data->H_Start[i])
+							&& (Time_RTCF746.Hours < Data->H_Stop[i]))
+
+							|| ((Time_RTCF746.Hours == Data->H_Start[i])
+							&& (Time_RTCF746.Minutes >= Data->M_Start[i]))
+
+							|| ((Time_RTCF746.Hours == Data->H_Stop[i])
+							&& (Time_RTCF746.Minutes <= Data->M_Stop[i]));
 			}
-			// Cas où le programme est sur plusieurs jours
-			// On est sur le jour de début du programme
+			// On est sur le jour de début mais pas de fin
 			else if ((Data->Jour[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0)
 			{
-				if ((Data->H_Start[i] == Time_RTCF746.Hours) && (Data->M_Start[i] <= Time_RTCF746.Minutes))
-				{
-					Egal = 1 ;
-				}
-				// à mettre avant à mon avis
-				else if (Data->H_Start[i] < Time_RTCF746.Hours)
-				{
-					Egal = 1 ;
-				}
+				notInProgram = (Time_RTCF746.Hours > Data->H_Start[i])
+
+							|| ((Time_RTCF746.Hours == Data->H_Start[i])
+							&& (Time_RTCF746.Minutes >= Data->M_Start[i]));
 			}
-			// Cas où le programme est sur plusieurs jours
-			// On est sur le jour de fin du programme
+			// On est sur le jour de fin mais pas de début
 			else if ((Data->Jour_Stop[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0)
 			{
-				if ((Data->H_Stop[i] == Time_RTCF746.Hours) && (Data->M_Stop[i] >= Time_RTCF746.Minutes))
-				{
-					Egal = 1 ;
-				}
-				// à mettre avant à mon avis
-				else if (Data->H_Stop[i] > Time_RTCF746.Hours)
-				{
-					Egal = 1 ;
-				}
+				notInProgram = (Time_RTCF746.Hours < Data->H_Stop[i])
+
+							|| ((Time_RTCF746.Hours == Data->H_Stop[i])
+							&& (Time_RTCF746.Minutes <= Data->M_Stop[i]));
 			}
+
 		}
 	}
-	return (Egal);
+
+	return !notInProgram;
 }
 
 
-// Fonction de vérification de si on est dans le programme
-// Redondant, à enlever à mon avis
 void Gestion_Priorites(void)
 {
-	if (Mode_Manuel != 1)
+	if ((!Mode_Manuel) && (Etat != 30))
 	{
-		if (Etat != 30)
-		{
-			Verif_Programme();
-		}
+		Verif_Programme();
 	}
 }
 

@@ -1,8 +1,8 @@
-../src/Service_Timer.c:24:6:Init_TIM2_Tempo	1
-../src/Service_Timer.c:48:6:Run_Tempo	1
-../src/Service_Timer.c:61:6:Stop_Tempo	1
-../src/Service_Timer.c:72:6:TIM2_IRQHandler	1
-../src/Service_Timer.c:85:6:Run_Pompe_1sec	1
-../src/Service_Timer.c:97:6:Stop_Pompe_1sec	1
-../src/Service_Timer.c:105:6:Init_TIM3_Pompe_1sec	1
-../src/Service_Timer.c:120:6:TIM3_IRQHandler	2
+../src/Service_Timer.c:25:6:Init_TIM2_Tempo	1
+../src/Service_Timer.c:38:6:Run_Tempo	1
+../src/Service_Timer.c:51:6:Stop_Tempo	1
+../src/Service_Timer.c:62:6:TIM2_IRQHandler	1
+../src/Service_Timer.c:72:6:Run_Pompe_1sec	1
+../src/Service_Timer.c:84:6:Stop_Pompe_1sec	1
+../src/Service_Timer.c:92:6:Init_TIM3_Pompe_1sec	1
+../src/Service_Timer.c:105:6:TIM3_IRQHandler	2

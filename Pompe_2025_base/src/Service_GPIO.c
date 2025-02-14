@@ -19,6 +19,7 @@ void Init_GPIO(void)
 	__HAL_RCC_GPIOB_CLK_ENABLE();
 	__HAL_RCC_GPIOI_CLK_ENABLE();
 	__HAL_RCC_GPIOG_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE();
 
 
 	// LED B4 (STM32) et D3(Nucléo)
@@ -39,6 +40,17 @@ void Init_GPIO(void)
 	GPIO_InitStruct.Mode=GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Speed=GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(GPIOG,&GPIO_InitStruct);
+
+
+
+	// UART RX PC7
+
+
+	GPIO_InitStruct.Pin=GPIO_PIN_7;
+	GPIO_InitStruct.Mode=GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Speed=GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Alternate=GPIO_AF8_USART6;
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 
 
@@ -65,7 +77,7 @@ void Init_GPIO(void)
 
 
 
-
+	// Voir utilité
 	// I2C1 GPIO Configuration
 	//	    PB8     ------> I2C1_SCL
 	//	    PB9     ------> I2C1_SDA

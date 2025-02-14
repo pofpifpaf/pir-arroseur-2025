@@ -233,6 +233,7 @@
 "./src/RTC_Function.o"
 "./src/Service_GPIO.o"
 "./src/Service_Timer.o"
+"./src/Service_UART.o"
 "./src/Utility_Flash.o"
 "./src/main.o"
 "./src/System/startup_stm32f746xx.o"

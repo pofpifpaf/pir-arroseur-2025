@@ -2,7 +2,7 @@ lvgl/src/gpu/lv_gpu_stm32_dma2d.o: ../lvgl/src/gpu/lv_gpu_stm32_dma2d.c \
  ../lvgl/src/gpu/lv_gpu_stm32_dma2d.h ../lvgl/src/gpu/../misc/lv_area.h \
  ../lvgl/src/gpu/../misc/../lv_conf_internal.h \
  ../lvgl/src/gpu/../misc/../lv_conf_kconfig.h \
- C:/Users/mahout/Documents/Enseignement/Tutorat\ -PFE/PIR/PIR\ Prise_commandee_2024/Pompe_2024_avecRTC&Flash/inc/lv_conf.h \
+ C:/Users/adamg/OneDrive/Documents/1travail/INSA/4A/S8/pir/pir-arroseur-2025/Pompe_2025_base/inc/lv_conf.h \
  ../lvgl/src/gpu/../misc/lv_color.h ../lvgl/src/gpu/../misc/lv_math.h \
  ../lvgl/src/gpu/../misc/lv_types.h ../lvgl/src/gpu/../hal/lv_hal_disp.h \
  ../lvgl/src/gpu/../hal/lv_hal.h ../lvgl/src/gpu/../hal/lv_hal_disp.h \
@@ -80,7 +80,7 @@ lvgl/src/gpu/lv_gpu_stm32_dma2d.o: ../lvgl/src/gpu/lv_gpu_stm32_dma2d.c \
 ../lvgl/src/gpu/../misc/lv_area.h:
 ../lvgl/src/gpu/../misc/../lv_conf_internal.h:
 ../lvgl/src/gpu/../misc/../lv_conf_kconfig.h:
-C:/Users/mahout/Documents/Enseignement/Tutorat\ -PFE/PIR/PIR\ Prise_commandee_2024/Pompe_2024_avecRTC&Flash/inc/lv_conf.h:
+C:/Users/adamg/OneDrive/Documents/1travail/INSA/4A/S8/pir/pir-arroseur-2025/Pompe_2025_base/inc/lv_conf.h:
 ../lvgl/src/gpu/../misc/lv_color.h:
 ../lvgl/src/gpu/../misc/lv_math.h:
 ../lvgl/src/gpu/../misc/lv_types.h:

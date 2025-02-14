@@ -12,7 +12,7 @@
 
 	typedef struct
 	{
-	  char Prog_Actif;					// Booléen, vrai si le programme est celui en cours
+	  char Prog_Actif;					// Booléen, vrai si le mode programme est activé // Quel est l'interet ?
 	  char Jour[NumProgMax];			// Jour de début du programme
 	  char H_Start[NumProgMax];			// Heure de début du programme
 	  char M_Start[NumProgMax];			// Minute de début du programme
@@ -27,8 +27,8 @@
 	void Decrement_Numeprog(void);
 	void Lire_Data_Prog( Data_Prog_Typedef *);
 	void Stocke_Data_Prog(Data_Prog_Typedef *);
-	char Is_Start(Data_Prog_Typedef  * , RTC_TimeTypeDef, RTC_DateTypeDef );
-	void CheckStop(Data_Prog_Typedef  *);
+	char isInProgram(Data_Prog_Typedef  * , RTC_TimeTypeDef, RTC_DateTypeDef );
+	void calculateStopTime(Data_Prog_Typedef  *);
 	void Verif_Programme(void);
 	void Gestion_Priorites(void);
 
