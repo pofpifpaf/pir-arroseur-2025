@@ -191,7 +191,7 @@ char  Change_Etat(void)
 			lv_obj_del(Texte_Marche);
 			lv_obj_del(spinner);
 			A_Effacer = 0;
-			Eteint_Pompe();
+			Eteint_Prise();
 			Stop_Pompe_1sec();
 			Compteur_Marche_Pompe = TempoMini;
 			Mode_Manuel = 0;

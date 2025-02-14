@@ -104,7 +104,7 @@ void EXTI9_5_IRQHandler(void)
 
 
 // A renommer
-void Allume_Pompe()
+void Allume_Prise()
 {
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, 1);
 	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, 1);
@@ -114,7 +114,7 @@ void Allume_Pompe()
 
 
 // A renommer
-void Eteint_Pompe()
+void Eteint_Prise()
 {
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, 0);
 	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, 0);

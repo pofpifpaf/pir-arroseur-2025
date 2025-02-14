@@ -7,6 +7,7 @@
 #include "stm32f7xx.h"
 #include <time.h>
 #include <Service_GPIO.h>
+#include <Service_UART.h>
 #include <Prog_Tempo.h>
 #include <Ecran_Lancer_Prog.h>
 #include "Utility_Flash.h"
@@ -143,11 +144,11 @@ void Verif_Programme()
 
 		if (isInProgram(&Data_Prog,Time_RTCF746,Date_RTCF746))
 		{
-			Allume_Pompe();
+			Allume_Prise();
 		}
 		else
 		{
-			Eteint_Pompe();
+			Eteint_Prise();
 		}
 }
 /*************************************************************************/
@@ -236,8 +237,11 @@ void Gestion_Priorites(void)
 {
 	if ((!Mode_Manuel) && (Etat != 30))
 	{
-		Verif_Programme();
+		//Verif_Programme();
+		Verif_UART();
 	}
+
+
 }
 
 

@@ -361,7 +361,7 @@ void event_handler_BoutonActiver_Pompe(lv_event_t *e) {
 			Ecran_Marche();
 		}
 		Run_Pompe_1sec();
-		Allume_Pompe();
+		Allume_Prise();
 		Mode_Manuel = 1 ;
 	}
 }
@@ -448,7 +448,7 @@ void event_handler_BoutonStopper_Pompe(lv_event_t *e) {
 			lv_obj_del(spinner) ;
 			A_Effacer = 0 ;
 		}
-		Eteint_Pompe();
+		Eteint_Prise();
 		Stop_Pompe_1sec();;
 		Compteur_Marche_Pompe = TempoMini ;
 		Mode_Manuel = 0 ;
@@ -506,7 +506,7 @@ void Bouton1(){
 		Ecran_Marche();
 	}
 	Run_Pompe_1sec();
-	Allume_Pompe();
+	Allume_Prise();
 	Mode_Manuel = 1 ;
 	Bouton=0;
 }
@@ -517,7 +517,7 @@ void Bouton2(){
 		lv_obj_del(spinner) ;
 		A_Effacer = 0 ;
 	}
-	Eteint_Pompe();
+	Eteint_Prise();
 	Stop_Pompe_1sec();;
 	Compteur_Marche_Pompe = TempoMini ;
 	Mode_Manuel = 0 ;

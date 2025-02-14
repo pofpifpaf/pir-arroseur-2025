@@ -1,5 +1,8 @@
 #include <Service_UART.h>
+#include <Service_GPIO.h>
 #include "stm32f7xx_hal.h"
+
+#define BUFFER_SIZE 100
 
 void USART6_IRQHandler(void) {
     HAL_UART_IRQHandler(&huart6);
@@ -8,8 +11,10 @@ void USART6_IRQHandler(void) {
 UART_HandleTypeDef huart6;
 
 uint8_t data_in;
-uint8_t data_buffer[100];
+uint8_t data_buffer[BUFFER_SIZE];
 uint32_t counter;
+
+char receive_toggle;
 
 void Init_UART()
 {
@@ -37,19 +42,45 @@ void Init_UART()
 	HAL_UART_Receive_IT(&huart6, &data_in, 1);
 
 	counter = 0;
+
+	receive_toggle = 0;
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 
 	counter++;
-	if (counter < 100)
+	if (counter < BUFFER_SIZE - 1)
 	{
 		data_buffer[counter] = data_in;
 	}
 
 	HAL_UART_Receive_IT(&huart6, &data_in, 1);
 }
+
+void Verif_UART()
+{
+	if (counter >= 2)
+	{
+		uint8_t n_boitier = data_buffer[0] >> 4;
+		uint8_t type_data = (data_buffer[0] & 0xF);
+		uint16_t data = (data_buffer[1] << 8) + (data_buffer[2]);
+
+		if (type_data == TOGGLE_PRISE)
+		{
+			receive_toggle = 1;
+			if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_7))
+			{
+				Eteint_Prise();
+			} else
+			{
+				Allume_Prise();
+			}
+			// Essayer d'afficher un message sur l'écran
+		}
+	}
+}
+
 
 
 

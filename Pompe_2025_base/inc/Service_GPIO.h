@@ -9,7 +9,7 @@
 #define SERVICE_GPIO_H_
 
 void Init_GPIO(void);
-void Allume_Pompe(void);
-void Eteint_Pompe(void);
+void Allume_Prise(void);
+void Eteint_Prise(void);
 
 #endif /* SERVICE_GPIO_H_ */
