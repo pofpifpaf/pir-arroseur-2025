@@ -37,7 +37,7 @@ extern char Transi_0to30;
 extern Data_Prog_Typedef Data_Prog;
 
 extern char Prog_En_Marche[8] ;
-extern int CapteurActivated;
+extern int capteur_active;
 
 
 void Creer_Ecran_Acceuil(void)
@@ -280,7 +280,7 @@ void Bouton_Reglage_Prog(void)
 			LV_EVENT_ALL, NULL);
 
 	lv_obj_t *label = lv_label_create(Bouton_Regl_Prog);
-	lv_label_set_text(label, "Reglage Progamme");
+	lv_label_set_text(label, "Reglage Programme");
 	lv_obj_center(label);
 
 }
@@ -441,7 +441,7 @@ void Bouton_Mode_Prog(void)
 			LV_EVENT_ALL, NULL);
 
 	lv_obj_t *label = lv_label_create(Bouton_Lancer_Prog);
-	lv_label_set_text(label, "Mode Progamme");
+	lv_label_set_text(label, "Mode Programme");
 	lv_obj_center(label);
 
 }

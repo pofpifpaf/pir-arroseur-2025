@@ -16,29 +16,67 @@ extern char Transi_4to4;
 
 lv_obj_t * preload;
 lv_obj_t * Texte_2;
+static lv_obj_t * slider_label;
 
-int CapteurActivated;
+uint16_t seuil_capteur = 0;
+
+int capteur_active;
 
 void event_handler_BoutonRetour_Lancer_Capteur(lv_event_t *e);
 void event_handler_Bouton_Appliquer_Capteur(lv_event_t * e);
 void event_handler_Bouton_Stopper_Capteur(lv_event_t * e);
+static void slider_event_cb(lv_event_t * );
 
 
-void Creer_Ecran_Lancer_Capteur(void) {
+void Creer_Ecran_Lancer_Capteur(void)
+{
 	lv_obj_clean(lv_scr_act());
-	Bouton_Retour_Lancer_Capteur();
+	Creer_Slider_Capteur();
+	Bouton_Retour_Capteur();
 	Bouton_Appliquer_Capteur();
 	Bouton_Stopper_Capteur();
 	Afficher_Texte_Capteur();
-	if (CapteurActivated==1){
-		Afficher_Texte_Capteur_2();
-		lv_ex_spinner_1();
+
+	if (capteur_active == 1)
+	{
+		Afficher_Texte_Capteur_En_Cours();
 	}
 }
 
+void Creer_Slider_Capteur(void)
+{
+    lv_obj_t * slider = lv_slider_create(lv_scr_act());
+    lv_obj_center(slider);
+    lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
 
+    lv_obj_set_style_anim_time(slider, 2000, 0);
+    /*Create a label below the slider*/
+    slider_label = lv_label_create(lv_scr_act());
 
-void Bouton_Retour_Lancer_Capteur(void) {
+    lv_obj_align(slider, LV_ALIGN_LEFT_MID, 20, 0);
+    lv_obj_align_to(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+
+    lv_slider_set_range(slider, 0, 100);
+    lv_slider_set_value(slider, seuil_capteur, LV_ANIM_OFF);
+
+    char buf[8];
+    lv_snprintf(buf, sizeof(buf), "%d%%", (int)seuil_capteur);
+    lv_label_set_text(slider_label, buf);
+}
+
+static void slider_event_cb(lv_event_t * e)
+{
+    lv_obj_t * slider = lv_event_get_target(e);
+    char buf[8];
+
+    seuil_capteur = (uint16_t)lv_slider_get_value(slider);
+
+    lv_snprintf(buf, sizeof(buf), "%d%%", (int)seuil_capteur);
+    lv_label_set_text(slider_label, buf);
+    lv_obj_align_to(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+}
+
+void Bouton_Retour_Capteur(void) {
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	static lv_style_t style_pr;
@@ -80,7 +118,7 @@ void Bouton_Retour_Lancer_Capteur(void) {
 	lv_style_set_shadow_ofs_y(&style_pr, 3);
 	lv_style_set_bg_color(&style_pr, lv_palette_darken(LV_PALETTE_BLUE, 2));
 	lv_style_set_bg_grad_color(&style_pr,
-			lv_palette_darken(LV_PALETTE_BLUE, 4));
+	lv_palette_darken(LV_PALETTE_BLUE, 4));
 	lv_style_set_text_font(&style, &lv_font_montserrat_12);
 
 	/*Add a transition to the the outline*/
@@ -109,7 +147,8 @@ void Bouton_Retour_Lancer_Capteur(void) {
 
 }
 
-void event_handler_BoutonRetour_Lancer_Capteur(lv_event_t *e) {
+void event_handler_BoutonRetour_Lancer_Capteur(lv_event_t *e)
+{
 	lv_event_code_t code = lv_event_get_code(e);
 
 	if (code == LV_EVENT_PRESSED) {
@@ -187,16 +226,15 @@ void Bouton_Appliquer_Capteur(void) {
 
 }
 
-void event_handler_Bouton_Appliquer_Capteur(lv_event_t *e) {
+void event_handler_Bouton_Appliquer_Capteur(lv_event_t *e)
+{
 	lv_event_code_t code = lv_event_get_code(e);
-	//if (Mode_Manuel==0){
-		if (code == LV_EVENT_PRESSED) {
-			Transi_4to4 = 1;
-			CapteurActivated=1;
-		}
-	//}else{
-	//	Afficher_Texte_Capteur_3();
+
+	if (code == LV_EVENT_PRESSED) {
+		Transi_4to4 = 1;
+		capteur_active = 1;
 	}
+}
 
 
 void Afficher_Texte_Capteur(void){
@@ -222,7 +260,7 @@ void Afficher_Texte_Capteur(void){
 
 }
 
-void Afficher_Texte_Capteur_2(void){
+void Afficher_Texte_Capteur_En_Cours(void){
 	//static const lv_style_prop_t props[] = {LV_STYLE_BG_COLOR, 0};
 	static lv_style_t style_txt;
 	char Label[25] ;
@@ -243,29 +281,6 @@ void Afficher_Texte_Capteur_2(void){
 	lv_obj_add_style(Texte_2, &style_txt, 0);
 
 	lv_obj_align(Texte_2, LV_ALIGN_CENTER, -120, 75);
-}
-
-void Afficher_Texte_Capteur_3(void){
-	//static const lv_style_prop_t props[] = {LV_STYLE_BG_COLOR, 0};
-	static lv_style_t style_txt;
-	char Label[25] ;
-
-
-	Texte_2 = lv_label_create(lv_scr_act());
-
-	lv_label_set_recolor(Texte_2, true);
-	sprintf(Label, "Mode manuel en cours");
-	lv_label_set_text(Texte_2, Label);
-
-	lv_color_t color = lv_palette_main(LV_PALETTE_RED) ;
-	lv_style_set_text_color(&style_txt,color);
-	lv_style_set_bg_color(&style_txt,lv_color_hex3(0x0b0) );
-	lv_style_set_text_letter_space(&style_txt, 5);
-	lv_style_set_text_line_space(&style_txt, 10);
-	lv_style_set_text_font(&style_txt, &lv_font_montserrat_10);
-	lv_obj_add_style(Texte_2, &style_txt, 0);
-
-	lv_obj_align(Texte_2, LV_ALIGN_CENTER, -120, 0);
 }
 
 
@@ -345,17 +360,10 @@ void event_handler_Bouton_Stopper_Capteur(lv_event_t *e) {
 
 	if (code == LV_EVENT_PRESSED) {
 		Transi_4to4 = 1;
-		CapteurActivated=0;
+		capteur_active = 0;
 	}
 }
 
-void lv_ex_spinner_1(void)
-{
-    //Create a Preloader object
-    preload = lv_spinner_create(lv_scr_act(),2000,20);
-    lv_obj_set_size(preload, 100, 100);
-    lv_obj_align(preload,LV_ALIGN_CENTER, -125, 0);
-}
 
 
 

@@ -1,4 +1,0 @@
-C:/Users/adamg/OneDrive/Documents/1travail/INSA/4A/S8/pir/pir-arroseur-2025/Pompe_2025_base/lvgl/src/lv_api_map.h:35:51:lv_task_handler	8	static
-../src/Machine_Etat.c:71:7:Change_Etat	8	static
-../src/Machine_Etat.c:231:6:Modifie_Etat	8	static
-../src/Machine_Etat.c:282:6:Refresh_Etat	8	static

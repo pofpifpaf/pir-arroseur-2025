@@ -39,11 +39,12 @@ char Transi_0to4;
 char Transi_1to0;
 char Transi_2to0;
 char Transi_0to2;
-char Transi_3to0 ;
-char Transi_3to3 ;
-char Transi_4to4 ;
-char Transi_4to0 ;
+char Transi_3to0;
+char Transi_3to3;
+char Transi_4to4;
+char Transi_4to0;
 char Transi_30to0,Transi_0to30,Transi_30to30;
+
 int Bouton = 0;
 int Default = 1 ;
 char Poussoir_Start_Appui;
@@ -63,6 +64,8 @@ extern RTC_HandleTypeDef RTC_F746;
 extern RTC_TimeTypeDef Time_RTCF746;
 extern RTC_DateTypeDef Date_RTCF746;
 extern char Num_Prog_Courant;
+
+
 
 
 /****************************************************************/

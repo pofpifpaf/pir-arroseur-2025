@@ -1,4 +1,0 @@
-../src/Service_UART.c:7:6:USART6_IRQHandler	1
-../src/Service_UART.c:19:6:Init_UART	2
-../src/Service_UART.c:49:6:HAL_UART_RxCpltCallback	2
-../src/Service_UART.c:61:6:Verif_UART	4

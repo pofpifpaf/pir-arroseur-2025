@@ -23,6 +23,8 @@
 
 
 
+
+
 char Num_Prog_Courant;
 Data_Prog_Typedef  Data_Prog;
 
@@ -232,6 +234,8 @@ char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_Date
 	return !notInProgram;
 }
 
+uint8_t pin_relay;
+
 
 void Gestion_Priorites(void)
 {
@@ -241,7 +245,7 @@ void Gestion_Priorites(void)
 		Verif_UART();
 	}
 
-
+	pin_relay = HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_7);
 }
 
 

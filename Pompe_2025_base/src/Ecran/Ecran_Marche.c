@@ -500,30 +500,38 @@ void Ecran_Marche(void){
 }
 
 
-void Bouton1(){
-	if (A_Effacer == 0){
+void Bouton1()
+{
+	if (A_Effacer == 0)
+	{
 		A_Effacer = 1 ;
 		Ecran_Marche();
 	}
+
 	Run_Pompe_1sec();
 	Allume_Prise();
+
 	Mode_Manuel = 1 ;
 	Bouton=0;
 }
 
-void Bouton2(){
-	if (A_Effacer == 1){
+void Bouton2()
+{
+	if (A_Effacer == 1)
+	{
 		lv_obj_del(Texte_Marche) ;
 		lv_obj_del(spinner) ;
 		A_Effacer = 0 ;
 	}
+
 	Eteint_Prise();
 	Stop_Pompe_1sec();;
+
 	Compteur_Marche_Pompe = TempoMini ;
 	Mode_Manuel = 0 ;
 	Minute60Sec = 0 ;
-	Bouton=0;
-	Transi_2to0=1 ;
+	Bouton = 0;
+	Transi_2to0 = 1 ;
 }
 
 

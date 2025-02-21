@@ -49,9 +49,6 @@ int main(void)
 	/* Enable D-Cache */
 	SCB_EnableDCache();
 
-	Init_UART();
-
-
 	Init_GPIO();
 	MX_RTC_Init();
 	lv_init();
@@ -60,6 +57,8 @@ int main(void)
 	Init_TIM2_Tempo();
 	Stop_Tempo();
 	Init_TIM3_Pompe_1sec();
+
+	Init_UART();
 
 	// Relecture des données de programmation stockés en Flash
 	Lire_Data_Prog(&Data_Prog);
