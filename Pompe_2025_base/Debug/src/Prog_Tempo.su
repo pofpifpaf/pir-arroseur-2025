@@ -4,5 +4,5 @@
 ../src/Prog_Tempo.c:115:6:Stocke_Data_Prog	88	static
 ../src/Prog_Tempo.c:140:6:Verif_Programme	32	static
 ../src/Prog_Tempo.c:159:6:calculateStopTime	40	static
-../src/Prog_Tempo.c:192:6:isInProgram	24	static
-../src/Prog_Tempo.c:240:6:Gestion_Priorites	8	static
+../src/Prog_Tempo.c:205:6:isInProgram	24	static
+../src/Prog_Tempo.c:262:6:Gestion_Priorites	8	static

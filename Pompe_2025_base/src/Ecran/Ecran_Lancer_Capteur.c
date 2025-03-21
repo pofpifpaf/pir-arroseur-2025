@@ -14,11 +14,16 @@
 extern char Transi_4to0;
 extern char Transi_4to4;
 
+#define MAX_VALUE 100
+#define MIN_VALUE 0
+
 lv_obj_t * preload;
 lv_obj_t * Texte_2;
 static lv_obj_t * slider_label;
 
-uint16_t seuil_capteur = 0;
+uint16_t seuil_capteur_high = 0;
+uint16_t seuil_capteur_low = 0;
+
 
 int capteur_active;
 
@@ -56,24 +61,22 @@ void Creer_Slider_Capteur(void)
     lv_obj_align(slider, LV_ALIGN_LEFT_MID, 20, 0);
     lv_obj_align_to(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
 
+    lv_slider_set_mode(slider, LV_SLIDER_MODE_RANGE);
     lv_slider_set_range(slider, 0, 100);
-    lv_slider_set_value(slider, seuil_capteur, LV_ANIM_OFF);
+    lv_slider_set_value(slider, seuil_capteur_high, LV_ANIM_OFF);
+    lv_slider_set_left_value(slider, seuil_capteur_low, LV_ANIM_OFF);
 
-    char buf[8];
-    lv_snprintf(buf, sizeof(buf), "%d%%", (int)seuil_capteur);
-    lv_label_set_text(slider_label, buf);
+    lv_label_set_text_fmt(slider_label, "%d% - %d%", seuil_capteur_low, seuil_capteur_high);
+    lv_obj_refresh_ext_draw_size(slider);
 }
 
 static void slider_event_cb(lv_event_t * e)
 {
-    lv_obj_t * slider = lv_event_get_target(e);
-    char buf[8];
+	lv_obj_t* slider = lv_event_get_target(e);
+	seuil_capteur_low = lv_slider_get_left_value(slider);
+	seuil_capteur_high = lv_slider_get_value(slider);
 
-    seuil_capteur = (uint16_t)lv_slider_get_value(slider);
-
-    lv_snprintf(buf, sizeof(buf), "%d%%", (int)seuil_capteur);
-    lv_label_set_text(slider_label, buf);
-    lv_obj_align_to(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+	lv_label_set_text_fmt(slider_label, "%d% - %d%", seuil_capteur_low, seuil_capteur_high);
 }
 
 void Bouton_Retour_Capteur(void) {

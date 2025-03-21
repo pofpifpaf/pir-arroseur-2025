@@ -144,7 +144,7 @@ void Verif_Programme()
 
 		calculateStopTime(&Data_Prog);
 
-		if (isInProgram(&Data_Prog,Time_RTCF746,Date_RTCF746))
+		if (isInProgram(&Data_Prog, Time_RTCF746, Date_RTCF746))
 		{
 			Allume_Prise();
 		}
@@ -188,11 +188,24 @@ void calculateStopTime(Data_Prog_Typedef* Data)
 	}
 }
 
-
+/*
+ * Data->Jour[i] est codé sur les 7 premiers bits, donc :
+ * 		1000000 = lundi
+ * 		1100000 = lundi et mardi
+ * 		0100001 = mardi et dimanche
+ * 	Date_RTCF746->Weekday() est de 1-7 :
+ * 		1 = lundi
+ * 		2 = mardi
+ * 		3 = mercredi
+ * 		...
+ *
+ * 		#define LL_RTC_WEEKDAY_MONDAY   ((uint8_t)0x01U)
+ *
+ */
 char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_DateTypeDef Date_RTCF746)
 {
 	int i;
-	char notInProgram = 0;
+	char inProgram = 0;
 
 	for (i = 0 ; i < NumProgMax ; i++)
 	{
@@ -202,19 +215,30 @@ char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_Date
 			if ((Data->Jour[i] == Data->Jour_Stop[i])
 				&& ((Data->Jour[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0))
 			{
-				notInProgram = ((Time_RTCF746.Hours > Data->H_Start[i])
+				inProgram =
+							/*entre heure de début et heure de fin*/
+							((Time_RTCF746.Hours > Data->H_Start[i])
 							&& (Time_RTCF746.Hours < Data->H_Stop[i]))
 
+							/*on est sur l'heure de début*/
 							|| ((Time_RTCF746.Hours == Data->H_Start[i])
 							&& (Time_RTCF746.Minutes >= Data->M_Start[i]))
 
+							/*on est sur l'heure de fin*/
 							|| ((Time_RTCF746.Hours == Data->H_Stop[i])
-							&& (Time_RTCF746.Minutes <= Data->M_Stop[i]));
+							&& (Time_RTCF746.Minutes <= Data->M_Stop[i]))
+
+							/*heure de début = heure de fin*/
+							|| ((Time_RTCF746.Hours == Data->H_Start[i])
+							&& (Data->H_Start[i] == Data->H_Stop[i])
+							&& (Time_RTCF746.Minutes >= Data->M_Start[i])
+							&& (Time_RTCF746.Minutes <= Data->M_Stop[i]))
+							;
 			}
 			// On est sur le jour de début mais pas de fin
 			else if ((Data->Jour[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0)
 			{
-				notInProgram = (Time_RTCF746.Hours > Data->H_Start[i])
+				inProgram = (Time_RTCF746.Hours > Data->H_Start[i])
 
 							|| ((Time_RTCF746.Hours == Data->H_Start[i])
 							&& (Time_RTCF746.Minutes >= Data->M_Start[i]));
@@ -222,7 +246,7 @@ char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_Date
 			// On est sur le jour de fin mais pas de début
 			else if ((Data->Jour_Stop[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0)
 			{
-				notInProgram = (Time_RTCF746.Hours < Data->H_Stop[i])
+				inProgram = (Time_RTCF746.Hours < Data->H_Stop[i])
 
 							|| ((Time_RTCF746.Hours == Data->H_Stop[i])
 							&& (Time_RTCF746.Minutes <= Data->M_Stop[i]));
@@ -231,21 +255,17 @@ char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_Date
 		}
 	}
 
-	return !notInProgram;
+	return inProgram;
 }
-
-uint8_t pin_relay;
 
 
 void Gestion_Priorites(void)
 {
 	if ((!Mode_Manuel) && (Etat != 30))
 	{
-		//Verif_Programme();
-		Verif_UART();
+		Verif_Programme();
+		//Verif_UART();
 	}
-
-	pin_relay = HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_7);
 }
 
 
