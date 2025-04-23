@@ -20,8 +20,8 @@ extern char Num_Prog_Courant;
 extern Data_Prog_Typedef Data_Prog;
 
 lv_obj_t *LabelTitre;
-lv_obj_t *Roller_H_Duree;
-lv_obj_t *Roller_M_Duree;
+lv_obj_t *Roller_H_Fin;
+lv_obj_t *Roller_M_Fin;
 lv_obj_t *Roller_H_Start;
 lv_obj_t *Roller_M_Start;
 lv_obj_t *BoxJour[7];
@@ -34,8 +34,8 @@ unsigned char Depart_Minute;
 
 static void Roller_Depart_Heure_event_handler(lv_event_t *e);
 static void Roller_Depart_Minute_event_handler(lv_event_t *e);
-static void Roller_Duree_Heure_event_handler(lv_event_t *e);
-static void Roller_Duree_Minute_event_handler(lv_event_t *e);
+static void Roller_Fin_Heure_event_handler(lv_event_t *e);
+static void Roller_Fin_Minute_event_handler(lv_event_t *e);
 
 void event_handler_BoutonRetour_Regle_Prog(lv_event_t *e);
 void event_handler_BoutonProg_Suivant(lv_event_t *e);
@@ -51,7 +51,7 @@ void Creer_Ecran_Regle_Prog(void) {
 		Bouton_Prog_Precedent();
 		CheckBox_Jour();
 		Roller_Depart();
-		Roller_Duree();
+		Roller_Fin();
 		lv_task_handler();
 	}
 	Label_Num(Num_Prog_Courant);
@@ -93,10 +93,10 @@ void Label_Num(char Num) {
 	{
 		sprintf(Titre, " Programme n° %d", Num);
 		lv_label_set_text(LabelTitre, Titre);
-		lv_roller_set_selected(Roller_H_Duree, Data_Prog.H_Duree[Num-1], LV_ANIM_ON);
-		lv_roller_set_selected(Roller_M_Duree, Data_Prog.M_Duree[Num-1], LV_ANIM_ON);
-		lv_roller_set_selected(Roller_H_Start, Data_Prog.H_Start[Num-1], LV_ANIM_ON);
-		lv_roller_set_selected(Roller_M_Start, Data_Prog.M_Start[Num-1], LV_ANIM_ON);
+		lv_roller_set_selected(Roller_H_Fin, Data_Prog.H_Stop[Num-1], LV_ANIM_OFF);
+		lv_roller_set_selected(Roller_M_Fin, Data_Prog.M_Stop[Num-1], LV_ANIM_OFF);
+		lv_roller_set_selected(Roller_H_Start, Data_Prog.H_Start[Num-1], LV_ANIM_OFF);
+		lv_roller_set_selected(Roller_M_Start, Data_Prog.M_Start[Num-1], LV_ANIM_OFF);
 
 		for (Boucle = 0; Boucle < NumProgMax-1 ; Boucle++ )
 		{
@@ -190,7 +190,7 @@ static void Roller_Depart_Minute_event_handler(lv_event_t *e) {
 	}
 }
 
-void Roller_Duree(void) {
+void Roller_Fin(void) {
 
 	int Boucle;
 
@@ -200,23 +200,23 @@ void Roller_Duree(void) {
 	static lv_style_t style_sel;
 
 	Chaine_Opt[0] = 0;
-	for (Boucle = 0; Boucle < 5; Boucle++) {
+	for (Boucle = 0; Boucle < 23; Boucle++) {
 		sprintf(Txt, "%d\n", Boucle);
 		strcat(Chaine_Opt, Txt);
 	}
-	Boucle = 3;
+	Boucle = 23;
 	sprintf(Txt, "%d", Boucle);
 	strcat(Chaine_Opt, Txt);
 
 	/*A roller on the middle with center aligned text, and auto (default) width*/
-	Roller_H_Duree = lv_roller_create(lv_scr_act());
-	lv_roller_set_options(Roller_H_Duree, Chaine_Opt, LV_ROLLER_MODE_INFINITE);
-	lv_roller_set_visible_row_count(Roller_H_Duree, 4);
-	lv_obj_add_style(Roller_H_Duree, &style_sel, LV_PART_SELECTED);
+	Roller_H_Fin = lv_roller_create(lv_scr_act());
+	lv_roller_set_options(Roller_H_Fin, Chaine_Opt, LV_ROLLER_MODE_INFINITE);
+	lv_roller_set_visible_row_count(Roller_H_Fin, 4);
+	lv_obj_add_style(Roller_H_Fin, &style_sel, LV_PART_SELECTED);
 
-	lv_obj_set_size(Roller_H_Duree, 50, 100);
-	lv_obj_align(Roller_H_Duree, LV_ALIGN_CENTER, 110, 0);
-	lv_obj_add_event_cb(Roller_H_Duree, Roller_Duree_Heure_event_handler,LV_EVENT_ALL, NULL);
+	lv_obj_set_size(Roller_H_Fin, 50, 100);
+	lv_obj_align(Roller_H_Fin, LV_ALIGN_CENTER, 110, 0);
+	lv_obj_add_event_cb(Roller_H_Fin, Roller_Fin_Heure_event_handler, LV_EVENT_ALL, NULL);
 
 	lv_obj_t *Label2 = lv_label_create(lv_scr_act());
 
@@ -225,7 +225,7 @@ void Roller_Duree(void) {
 
 	lv_obj_t *Label = lv_label_create(lv_scr_act());
 
-	lv_label_set_text(Label, "Duree ");
+	lv_label_set_text(Label, "Fin ");
 	lv_obj_align(Label, LV_ALIGN_CENTER, 137, -80);
 	lv_style_set_text_font(&style, &lv_font_montserrat_18);
 	lv_style_set_text_color(&style, lv_color_make(125, 25, 12));
@@ -240,40 +240,39 @@ void Roller_Duree(void) {
 	sprintf(Txt, "%d", Boucle);
 	strcat(Chaine_Opt, Txt);
 
-	/*A roller on the middle w
-	 * ith center aligned text, and auto (default) width*/
-	Roller_M_Duree = lv_roller_create(lv_scr_act());
-	lv_roller_set_options(Roller_M_Duree, Chaine_Opt, LV_ROLLER_MODE_INFINITE);
-	lv_roller_set_visible_row_count(Roller_M_Duree, 3);
-	lv_obj_add_style(Roller_M_Duree, &style_sel, LV_PART_SELECTED);
+	/*A roller on the middle with center aligned text, and auto (default) width*/
+	Roller_M_Fin = lv_roller_create(lv_scr_act());
+	lv_roller_set_options(Roller_M_Fin, Chaine_Opt, LV_ROLLER_MODE_INFINITE);
+	lv_roller_set_visible_row_count(Roller_M_Fin, 3);
+	lv_obj_add_style(Roller_M_Fin, &style_sel, LV_PART_SELECTED);
 
-	lv_obj_set_size(Roller_M_Duree, 50, 100);
-	lv_obj_align(Roller_M_Duree, LV_ALIGN_CENTER, 170, 0);
-	lv_obj_add_event_cb(Roller_M_Duree, Roller_Duree_Minute_event_handler,LV_EVENT_ALL, NULL);
+	lv_obj_set_size(Roller_M_Fin, 50, 100);
+	lv_obj_align(Roller_M_Fin, LV_ALIGN_CENTER, 170, 0);
+	lv_obj_add_event_cb(Roller_M_Fin, Roller_Fin_Minute_event_handler,LV_EVENT_ALL, NULL);
 
 
 }
 
-static void Roller_Duree_Heure_event_handler(lv_event_t *e) {
+static void Roller_Fin_Heure_event_handler(lv_event_t *e) {
 	lv_event_code_t code = lv_event_get_code(e);
 	lv_obj_t *obj = lv_event_get_target(e);
 	if (code == LV_EVENT_VALUE_CHANGED) {
 		char buf[32];
 		lv_roller_get_selected_str(obj, buf, sizeof(buf));
 		Duree_Heure = (unsigned char) (atoi(buf));
-		Data_Prog.H_Duree[Num_Prog_Courant - 1] = Duree_Heure;
+		Data_Prog.H_Stop[Num_Prog_Courant - 1] = Duree_Heure;
 
 	}
 }
 
-static void Roller_Duree_Minute_event_handler(lv_event_t *e) {
+static void Roller_Fin_Minute_event_handler(lv_event_t *e) {
 	lv_event_code_t code = lv_event_get_code(e);
 	lv_obj_t *obj = lv_event_get_target(e);
 	if (code == LV_EVENT_VALUE_CHANGED) {
 		char buf[32];
 		lv_roller_get_selected_str(obj, buf, sizeof(buf));
 		Duree_Minute = (unsigned char) (atoi(buf));
-		Data_Prog.M_Duree[Num_Prog_Courant - 1] = Duree_Minute;
+		Data_Prog.M_Stop[Num_Prog_Courant - 1] = Duree_Minute;
 	}
 }
 
@@ -298,9 +297,9 @@ void Bouton_Retour_Regle_Prog(void) {
 	lv_style_set_border_width(&style, 2);
 	lv_style_set_border_color(&style, lv_palette_main(LV_PALETTE_GREY));
 
-	lv_style_set_shadow_width(&style, 8);
-	lv_style_set_shadow_color(&style, lv_palette_main(LV_PALETTE_GREY));
-	lv_style_set_shadow_ofs_y(&style, 8);
+//	lv_style_set_shadow_width(&style, 8);
+//	lv_style_set_shadow_color(&style, lv_palette_main(LV_PALETTE_GREY));
+//	lv_style_set_shadow_ofs_y(&style, 8);
 
 	lv_style_set_outline_opa(&style, LV_OPA_COVER);
 	lv_style_set_outline_color(&style, lv_palette_main(LV_PALETTE_BLUE));
@@ -312,11 +311,11 @@ void Bouton_Retour_Regle_Prog(void) {
 	lv_style_init(&style_pr);
 
 	/*Ad a large outline when pressed*/
-	lv_style_set_outline_width(&style_pr, 25);
-	lv_style_set_outline_opa(&style_pr, LV_OPA_TRANSP);
+//	lv_style_set_outline_width(&style_pr, 25);
+//	lv_style_set_outline_opa(&style_pr, LV_OPA_TRANSP);
 
 	lv_style_set_translate_y(&style_pr, 5);
-	lv_style_set_shadow_ofs_y(&style_pr, 3);
+//	lv_style_set_shadow_ofs_y(&style_pr, 3);
 	lv_style_set_bg_color(&style_pr, lv_palette_darken(LV_PALETTE_BLUE, 2));
 	lv_style_set_bg_grad_color(&style_pr,
 			lv_palette_darken(LV_PALETTE_BLUE, 4));
@@ -324,10 +323,10 @@ void Bouton_Retour_Regle_Prog(void) {
 
 	/*Add a transition to the the outline*/
 
-	lv_style_transition_dsc_init(&trans, props, lv_anim_path_linear, 300, 0,
-			NULL);
-
-	lv_style_set_transition(&style_pr, &trans);
+//	lv_style_transition_dsc_init(&trans, props, lv_anim_path_linear, 300, 0,
+//			NULL);
+//
+//	lv_style_set_transition(&style_pr, &trans);
 
 	lv_obj_t *Bouton_Retour_Regle_Prog = lv_btn_create(lv_scr_act());
 	lv_obj_remove_style_all(Bouton_Retour_Regle_Prog);
@@ -378,9 +377,9 @@ void Bouton_Prog_Suivant(void) {
 	lv_style_set_border_width(&style, 2);
 	lv_style_set_border_color(&style, lv_palette_main(LV_PALETTE_GREY));
 
-	lv_style_set_shadow_width(&style, 8);
-	lv_style_set_shadow_color(&style, lv_palette_main(LV_PALETTE_GREY));
-	lv_style_set_shadow_ofs_y(&style, 8);
+//	lv_style_set_shadow_width(&style, 8);
+//	lv_style_set_shadow_color(&style, lv_palette_main(LV_PALETTE_GREY));
+//	lv_style_set_shadow_ofs_y(&style, 8);
 
 	lv_style_set_outline_opa(&style, LV_OPA_COVER);
 	lv_style_set_outline_color(&style, lv_palette_main(LV_PALETTE_BLUE));
@@ -392,11 +391,11 @@ void Bouton_Prog_Suivant(void) {
 	lv_style_init(&style_pr);
 
 	/*Ad a large outline when pressed*/
-	lv_style_set_outline_width(&style_pr, 25);
-	lv_style_set_outline_opa(&style_pr, LV_OPA_TRANSP);
+//	lv_style_set_outline_width(&style_pr, 25);
+//	lv_style_set_outline_opa(&style_pr, LV_OPA_TRANSP);
 
 	lv_style_set_translate_y(&style_pr, 5);
-	lv_style_set_shadow_ofs_y(&style_pr, 3);
+//	lv_style_set_shadow_ofs_y(&style_pr, 3);
 	lv_style_set_bg_color(&style_pr, lv_palette_darken(LV_PALETTE_BLUE, 2));
 	lv_style_set_bg_grad_color(&style_pr,
 			lv_palette_darken(LV_PALETTE_BLUE, 4));
@@ -404,10 +403,10 @@ void Bouton_Prog_Suivant(void) {
 
 	/*Add a transition to the the outline*/
 
-	lv_style_transition_dsc_init(&trans, props, lv_anim_path_linear, 300, 0,
-			NULL);
-
-	lv_style_set_transition(&style_pr, &trans);
+//	lv_style_transition_dsc_init(&trans, props, lv_anim_path_linear, 300, 0,
+//			NULL);
+//
+//	lv_style_set_transition(&style_pr, &trans);
 
 	lv_obj_t *Bouton_Prog_Suivant = lv_btn_create(lv_scr_act());
 	lv_obj_remove_style_all(Bouton_Prog_Suivant);
@@ -460,9 +459,9 @@ void Bouton_Prog_Precedent(void) {
 	lv_style_set_border_width(&style, 2);
 	lv_style_set_border_color(&style, lv_palette_main(LV_PALETTE_GREY));
 
-	lv_style_set_shadow_width(&style, 8);
-	lv_style_set_shadow_color(&style, lv_palette_main(LV_PALETTE_GREY));
-	lv_style_set_shadow_ofs_y(&style, 8);
+//	lv_style_set_shadow_width(&style, 8);
+//	lv_style_set_shadow_color(&style, lv_palette_main(LV_PALETTE_GREY));
+//	lv_style_set_shadow_ofs_y(&style, 8);
 
 	lv_style_set_outline_opa(&style, LV_OPA_COVER);
 	lv_style_set_outline_color(&style, lv_palette_main(LV_PALETTE_BLUE));
@@ -474,11 +473,11 @@ void Bouton_Prog_Precedent(void) {
 	lv_style_init(&style_pr);
 
 	/*Ad a large outline when pressed*/
-	lv_style_set_outline_width(&style_pr, 25);
-	lv_style_set_outline_opa(&style_pr, LV_OPA_TRANSP);
+//	lv_style_set_outline_width(&style_pr, 25);
+//	lv_style_set_outline_opa(&style_pr, LV_OPA_TRANSP);
 
 	lv_style_set_translate_y(&style_pr, 5);
-	lv_style_set_shadow_ofs_y(&style_pr, 3);
+//	lv_style_set_shadow_ofs_y(&style_pr, 3);
 	lv_style_set_bg_color(&style_pr, lv_palette_darken(LV_PALETTE_BLUE, 2));
 	lv_style_set_bg_grad_color(&style_pr,
 			lv_palette_darken(LV_PALETTE_BLUE, 4));
@@ -486,10 +485,10 @@ void Bouton_Prog_Precedent(void) {
 
 	/*Add a transition to the the outline*/
 
-	lv_style_transition_dsc_init(&trans, props, lv_anim_path_linear, 300, 0,
-			NULL);
-
-	lv_style_set_transition(&style_pr, &trans);
+//	lv_style_transition_dsc_init(&trans, props, lv_anim_path_linear, 300, 0,
+//			NULL);
+//
+//	lv_style_set_transition(&style_pr, &trans);
 
 	lv_obj_t *Bouton_Prog_Precedent = lv_btn_create(lv_scr_act());
 	lv_obj_remove_style_all(Bouton_Prog_Precedent);

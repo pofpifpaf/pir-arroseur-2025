@@ -3,6 +3,6 @@
 ../src/Prog_Tempo.c:83:6:Lire_Data_Prog	2
 ../src/Prog_Tempo.c:115:6:Stocke_Data_Prog	2
 ../src/Prog_Tempo.c:140:6:Verif_Programme	2
-../src/Prog_Tempo.c:159:6:calculateStopTime	4
-../src/Prog_Tempo.c:205:6:isInProgram	23
-../src/Prog_Tempo.c:262:6:Gestion_Priorites	3
+../src/Prog_Tempo.c:161:6:calculateStopTime	2
+../src/Prog_Tempo.c:223:6:isInProgram	16
+../src/Prog_Tempo.c:319:6:Gestion_Priorites	3

@@ -13,7 +13,7 @@ void Bouton_Retour_Regle_Prog(void);
 void Bouton_Prog_Suivant(void);
 void Bouton_Prog_Precedent(void);
 void CheckBox_Jour(void);
-void Roller_Duree(void);
+void Roller_Fin(void);
 void Roller_Depart(void);
 void Label_Num(char);
 

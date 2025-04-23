@@ -66,7 +66,7 @@ void Creer_Slider_Capteur(void)
     lv_slider_set_value(slider, seuil_capteur_high, LV_ANIM_OFF);
     lv_slider_set_left_value(slider, seuil_capteur_low, LV_ANIM_OFF);
 
-    lv_label_set_text_fmt(slider_label, "%d% - %d%", seuil_capteur_low, seuil_capteur_high);
+    lv_label_set_text_fmt(slider_label, "%d - %d", seuil_capteur_low, seuil_capteur_high);
     lv_obj_refresh_ext_draw_size(slider);
 }
 
@@ -76,7 +76,7 @@ static void slider_event_cb(lv_event_t * e)
 	seuil_capteur_low = lv_slider_get_left_value(slider);
 	seuil_capteur_high = lv_slider_get_value(slider);
 
-	lv_label_set_text_fmt(slider_label, "%d% - %d%", seuil_capteur_low, seuil_capteur_high);
+	lv_label_set_text_fmt(slider_label, "%d - %d", seuil_capteur_low, seuil_capteur_high);
 }
 
 void Bouton_Retour_Capteur(void) {
