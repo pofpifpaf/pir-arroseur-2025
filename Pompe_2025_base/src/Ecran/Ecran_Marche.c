@@ -26,7 +26,7 @@ int TempoMini = 20;
 extern char Transi_1to0;
 extern char Transi_2to0;
 
-extern char Poussoir_Start_Appui;
+extern char Start_Button_Pushed;
 extern int Compteur_Marche_Pompe;
 extern char Minute60Sec ;
 extern int Bouton ;

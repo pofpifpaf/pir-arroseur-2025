@@ -33,7 +33,7 @@ extern char Transi_0to1;
 extern char Transi_0to2;
 extern char Transi_0to3;
 extern char Transi_0to4;
-extern char Transi_0to30;
+extern char Transi_0to5;
 extern Data_Prog_Typedef Data_Prog;
 
 extern char Prog_En_Marche[8] ;
@@ -290,7 +290,7 @@ void event_handler_Bouton_Regl_Prog(lv_event_t *e)
 	lv_event_code_t code = lv_event_get_code(e);
 
 	if (code == LV_EVENT_PRESSED) {
-		Transi_0to30 = 1;
+		Transi_0to5 = 1;
 	}
 }
 

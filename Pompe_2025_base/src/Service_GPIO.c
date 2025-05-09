@@ -5,7 +5,7 @@
 extern char Transi_1to0;
 extern char Transi_2to0;
 
-extern char Poussoir_Start_Appui;
+extern char Start_Button_Pushed;
 GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 
@@ -104,7 +104,7 @@ void Init_GPIO(void)
 void EXTI9_5_IRQHandler(void)
 {
 	__HAL_GPIO_EXTI_CLEAR_FLAG(GPIO_PIN_6);
-	Poussoir_Start_Appui = 1;
+	Start_Button_Pushed = 1;
 }
 
 

@@ -69,7 +69,6 @@ void Decrement_Numeprog(void)
 // Faire en sorte qu'il écrit pas en flash à chaque fois
 /******************************************************************/
 /* Initialisation des données des programmes                      */
-/* Lecture de la RAM dee la DS1307                                */
 /* Ram[0] = Actif                                                 */
 /* Ram[1] = Jour[1}                                               */
 /* Ram[2] = H_start[1]                                            */
@@ -101,7 +100,7 @@ void Lire_Data_Prog(Data_Prog_Typedef *Data)
 }
 
 /******************************************************************/
-/* Sauvegarde des données des programmes                          */
+/* Program data saving                                            */
 /* en RAM de la DS1307                                            */
 /* Ram[0] = Actif                                                 */
 /* Ram[1] = H_start[1]                                            */
@@ -135,14 +134,12 @@ void Stocke_Data_Prog(Data_Prog_Typedef *Data)
 }
 
 /******************************************************************/
-/*   Fonction de vérification si on doit allumer ou non la prise */
+/*                 Program scheduling main function               */
 /******************************************************************/
 void Verif_Programme()
 {
 		HAL_RTC_GetTime(&RTC_F746, &Time_RTCF746, RTC_FORMAT_BIN);
 		HAL_RTC_GetDate(&RTC_F746, &Date_RTCF746, RTC_FORMAT_BIN);
-
-		calculateStopTime(&Data_Prog);
 
 		if (isInProgram(&Data_Prog, Time_RTCF746, Date_RTCF746))
 		{
@@ -153,68 +150,16 @@ void Verif_Programme()
 			Eteint_Prise();
 		}
 }
-int mcheckstart;
-int mcheckduree;
-/*************************************************************************/
-/*   Fonction de calcul de l'heure et du jour de fin de chaque programme */
-/*************************************************************************/
-void calculateStopTime(Data_Prog_Typedef* Data)
-{
-	int JStop, MStop, HStop, retH, retM;
-
-	for (int i = 0; i < NumProgMax; i++)
-	{
-//		retM = 0;
-//		retH = 0;
-
-//		MStop = Data->M_Start[i] + Data->M_Duree[i];
-//		mcheckstart = Data->M_Start[i];
-//		mcheckduree = Data->M_Duree[i];
-//		if (MStop >= 60)
-//		{
-//			MStop = MStop - 60;
-//			retM = 1;
-//		}
-//
-//		HStop = Data->H_Start[i] + Data->H_Duree[i] + retM;
-//		if (HStop >= 24)
-//		{
-//			HStop = HStop - 24;
-//			retH = 1;
-//		}
-
-//		JStop = (Data->Jour[i] << retH) | (Data->Jour[i] >> (7-retH)) ;
-//		JStop &= ~(0x80) ;  //efface le bit numéro 7
-		Data->Jour[i] &= ~(0x80);
-
-//		Data->Jour_Stop[i] = (char)(JStop);
-//		Data->H_Stop[i] = (char)(HStop);
-//		Data->M_Stop[i] = (char)(MStop);
-	}
-}
-
-int weekday;
-int weekdaystop;
-int weekdaystart;
-
-int hourRTC;
-int hourstart;
-int hourstop;
-
-int minRTC;
-int minstart;
-int minstop;
-
 
 /*
- * Data->Jour[i] est codé sur les 7 premiers bits, donc :
- * 		01000000 = dimanche
- * 		01100000 = dimanche et samedi
- * 		00100001 = samedi et lundi
- * Date_RTCF746->Weekday() est de 1-7 :
- * 		1 = lundi
- * 		2 = mardi
- * 		3 = mercredi
+ * Data->Jour[i] is coded on the first 7 bits:
+ * 		01000000 = sunday
+ * 		01100000 = sunday and saturday
+ * 		00100001 = saturday and monday
+ * Date_RTCF746->Weekday():
+ * 		1 = monday
+ * 		2 = tuesday
+ * 		3 = wednesday
  * 		...
  *
  * 		#define LL_RTC_WEEKDAY_MONDAY   ((uint8_t)0x01U)
@@ -224,22 +169,13 @@ char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_Date
 {
 	int i;
 	char inProgram = 0;
-//	weekday = Date_RTCF746.WeekDay;
-//	weekdaystop = Data->Jour_Stop[0];
-//	weekdaystart = Data->Jour[0];
-//
-//	hourRTC = Time_RTCF746.Hours;
-//	hourstart = Data->H_Start[0];
-//	hourstop = Data->H_Stop[0];
-//
-//	minRTC = Time_RTCF746.Minutes;
-//	minstart = Data->M_Start[0];
-//	minstop = Data->M_Stop[0];
 
 	for (i = 0 ; i < NumProgMax ; i++)
 	{
 		if (Prog_En_Marche[i] == 1)
 		{
+			Data->Jour[i] &= ~(0x80);
+
 			if (((Data->Jour[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0))
 			{
 				inProgram |=
@@ -260,55 +196,6 @@ char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_Date
 							&& (Time_RTCF746.Minutes > Data->M_Start[i]))
 							;
 			}
-//			// On est sur le jour de début et de fin
-//			if ((Data->Jour[i] == Data->Jour_Stop[i])
-//				&& ((Data->Jour[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0))
-//			{
-//				inProgram =
-//							/*entre heure de début et heure de fin*/
-//							((Time_RTCF746.Hours > Data->H_Start[i])
-//							&& (Time_RTCF746.Hours < Data->H_Stop[i]))
-//
-//							|| ((Data->H_Start[i] > Data->H_Stop[i])
-//								&& (((Time_RTCF746.Hours <= Data->H_Stop[i])
-//									&& (Time_RTCF746.Minutes < Data->M_Stop[i]))
-//										|| ((Time_RTCF746.Hours > Data->H_Start[i])
-//										&& (Time_RTCF746.Minutes > Data->M_Start[i]))))
-//
-//							/*on est sur l'heure de début*/
-//							|| ((Time_RTCF746.Hours == Data->H_Start[i])
-//							&& (Time_RTCF746.Hours != Data->H_Stop[i])
-//							&& (Time_RTCF746.Minutes >= Data->M_Start[i]))
-//
-//							/*on est sur l'heure de fin*/
-//							|| ((Time_RTCF746.Hours == Data->H_Stop[i])
-//							&& (Time_RTCF746.Hours != Data->H_Start[i])
-//							&& (Time_RTCF746.Minutes <= Data->M_Stop[i]))
-//
-//							/*heure de début = heure de fin*/
-//							|| ((Time_RTCF746.Hours == Data->H_Start[i])
-//							&& (Data->H_Start[i] == Data->H_Stop[i])
-//							&& (Time_RTCF746.Minutes >= Data->M_Start[i])
-//							&& (Time_RTCF746.Minutes < Data->M_Stop[i]))
-//							;
-//			}
-//			// On est sur le jour de début mais pas de fin
-//			else if ((Data->Jour[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0)
-//			{
-//				inProgram = (Time_RTCF746.Hours > Data->H_Start[i])
-//
-//							|| ((Time_RTCF746.Hours == Data->H_Start[i])
-//							&& (Time_RTCF746.Minutes >= Data->M_Start[i]));
-//			}
-//			// On est sur le jour de fin mais pas de début
-//			else if ((Data->Jour_Stop[i] & (0x1 << (Date_RTCF746.WeekDay-1))) != 0)
-//			{
-//				inProgram = (Time_RTCF746.Hours < Data->H_Stop[i])
-//
-//							|| ((Time_RTCF746.Hours == Data->H_Stop[i])
-//							&& (Time_RTCF746.Minutes <= Data->M_Stop[i]));
-//			}
-//
 		}
 	}
 
@@ -321,7 +208,7 @@ void Gestion_Priorites(void)
 	if ((!Mode_Manuel) && (Etat != 30))
 	{
 		Verif_Programme();
-		//Verif_UART();
+		Verif_UART();
 	}
 }
 

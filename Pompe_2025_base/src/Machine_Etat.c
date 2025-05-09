@@ -4,7 +4,6 @@
  *  Created on: 18 juil. 2021
  *      Author: mahout
  *
- *  Voir machine à état drive
  *
  *
  */
@@ -32,22 +31,29 @@ int Etat;
 extern void LCD_DisplayOn(void);
 extern void LCD_DisplayOff(void);
 
+/*
+ * STATE MACHINE DEFINITION
+ *
+	#define HOME 0
+	#define TIME_CONFIGURATION_MODE 1
+	#define MANUAL_OPERATION_MODE 2
+	#define PROGRAM_MODE 3
+	#define SENSOR_MODE 4
+	#define PROGRAM_CONFIGURATION_MODE 5
+	#define SLEEP_MODE 6
+
+ */
+
 char Change;
-char Transi_0to1;
-char Transi_0to3;
-char Transi_0to4;
-char Transi_1to0;
-char Transi_2to0;
-char Transi_0to2;
-char Transi_3to0;
-char Transi_3to3;
-char Transi_4to4;
-char Transi_4to0;
-char Transi_30to0,Transi_0to30,Transi_30to30;
+char Transi_0to1, Transi_1to0;
+char Transi_0to3, Transi_3to0, Transi_3to3;
+char Transi_0to2, Transi_2to0;
+char Transi_4to0, Transi_0to4, Transi_4to4;
+char Transi_5to0, Transi_0to5, Transi_5to5;
 
 int Bouton = 0;
 int Default = 1 ;
-char Poussoir_Start_Appui;
+char Start_Button_Pushed;
 char Fin_Tempo;
 char Minute60Sec ;
 int Compteur_Marche_Pompe = 20 ;
@@ -69,160 +75,166 @@ extern char Num_Prog_Courant;
 
 
 /****************************************************************/
-/*           EVOLUTION DE LA MACHINE                            */
+/*                      STATE CHANGE                            */
 /****************************************************************/
-char  Change_Etat(void)
+char Change_Etat(void)
 /****************************************************************/
 {
 	Change = 0;
 
-	if (Etat == 0)
+	switch(Etat)
 	{
-		if (Transi_0to1 == 1)
+	case HOME :
+		if (Fin_Tempo)
 		{
-			Etat = 1;
+			Etat = SLEEP_MODE;
+			Change = 1;
+			Fin_Tempo = 0;
+		}
+		else if (Transi_0to2)
+		{
+			Etat = MANUAL_OPERATION_MODE;
+			Change = 1;
+			Transi_0to2 = 0;
+			Start_Button_Pushed = 0;
+			Stop_Tempo();
+		}
+		else if (Transi_0to1)
+		{
+			Etat = TIME_CONFIGURATION_MODE;
 			Change = 1;
 			Transi_0to1 = 0;
 			Stop_Tempo();
 		}
-		if (Fin_Tempo == 1)
+		else if (Transi_0to5)
 		{
-			Etat = -1;
+			Etat = PROGRAM_CONFIGURATION_MODE;
 			Change = 1;
-			Fin_Tempo = 0;
-		}
-		if (Transi_0to2 == 1)
-		{
-			Etat = 2;
-			Change = 1;
-			Transi_0to2 = 0;
-			Poussoir_Start_Appui = 0;
+			Transi_0to5 = 0;
 			Stop_Tempo();
 		}
-		if (Transi_0to30 == 1)
+		else if (Transi_0to3)
 		{
-			Etat = 30;
-			Change = 1;
-			Transi_0to30 = 0;
-			Stop_Tempo();
-		}
-		if (Transi_0to3 == 1)
-		{
-			Etat = 3;
+			Etat = PROGRAM_MODE;
 			Change = 1;
 			Transi_0to3 = 0;
 			Stop_Tempo();
 		}
-		if (Transi_0to4 == 1)
+		else if (Transi_0to4)
 		{
-			Etat = 4 ;
-			Change = 1 ;
+			Etat = SENSOR_MODE;
+			Change = 1;
 			Transi_0to4 = 0;
 			Stop_Tempo();
 		}
-		if (Poussoir_Start_Appui == 1)
+		else if (Start_Button_Pushed)
 		{
-			Etat = 2;
+			Etat = MANUAL_OPERATION_MODE;
 			Change = 1;
-			Poussoir_Start_Appui = 0;
+			Start_Button_Pushed = 0;
 			Bouton = 1;
 			Stop_Tempo();
 		}
-	}
+		break;
 
-	if(Etat == 1 && Transi_1to0 == 1)
-	{
-		Etat = 0;
-		Change = 1;
-		Transi_1to0 = 0;
-	}
-
-	if(Etat == 3)
-	{
-		if (Transi_3to0 == 1)
+	case TIME_CONFIGURATION_MODE :
+		if (Transi_1to0)
 		{
-			Etat = 0;
+			Etat = HOME;
+			Change = 1;
+			Transi_1to0 = 0;
+		}
+		break;
+
+	case PROGRAM_MODE :
+		if (Transi_3to0)
+		{
+			Etat = HOME;
 			Change = 1;
 			Transi_3to0 = 0;
 		}
-		if (Transi_3to3 == 1)
+		else if (Transi_3to3)
 		{
-			Etat = 3;
+			Etat = PROGRAM_MODE;
 			Change = 1;
 			Transi_3to3 = 0;
 		}
-	}
+		break;
 
-	if(Etat == 30)
-	{
-		if (Transi_30to30 == 1)
+	case PROGRAM_CONFIGURATION_MODE :
+		if (Transi_5to5)
 		{
-			Etat = 30;
+			Etat = PROGRAM_CONFIGURATION_MODE;
 			Change = 1;
-			Transi_30to30 = 0;
+			Transi_5to5 = 0;
 		}
-		if (Transi_30to0 == 1)
+		else if (Transi_5to0)
 		{
-			Etat = 0;
+			Etat = HOME;
 			Change = 1;
-			Transi_30to0 = 0;
+			Transi_5to0 = 0;
 		}
-	}
+		break;
 
-	if(Etat == -1)
-	{
+	case SLEEP_MODE :
 		BSP_TS_GetState(&TS_State);
-		if(TS_State.touchDetected || Poussoir_Start_Appui==1)
+		if(TS_State.touchDetected || Start_Button_Pushed)
 		{
 			LCD_DisplayOn();
-			Etat = 0;
+			Etat = HOME;
 			Change = 1;
-			Poussoir_Start_Appui=0;
+			Start_Button_Pushed = 0;
 		}
-	}
-	if(Etat == 2)
-	{
-		if (Transi_2to0 == 1)
+		break;
+
+	case MANUAL_OPERATION_MODE :
+		if (Transi_2to0)
 		{
-			Etat = 0;
+			Etat = HOME;
 			Change = 1;
 			Transi_2to0 = 0;
-			Poussoir_Start_Appui = 0;
+			Start_Button_Pushed = 0;
+		}
+		else if (Start_Button_Pushed)
+		{
+			Etat = MANUAL_OPERATION_MODE;
+			Change = 1;
+			Start_Button_Pushed = 0;
+			Bouton = 1;
+			Default = 0;
 		}
 		if (Compteur_Marche_Pompe < 0)
 		{
 			lv_obj_del(Texte_Marche);
 			lv_obj_del(spinner);
+
 			A_Effacer = 0;
+
 			Eteint_Prise();
 			Stop_Pompe_1sec();
+
 			Compteur_Marche_Pompe = TempoMini;
 			Mode_Manuel = 0;
 			Minute60Sec = 0;
 		}
-		if (Poussoir_Start_Appui==1)
+		break;
+
+	case SENSOR_MODE :
+		if (Transi_4to0)
 		{
-			Etat = 2;
-			Change = 1;
-			Poussoir_Start_Appui = 0;
-			Bouton = 1;
-			Default = 0;
-		}
-	}
-	if (Etat == 4)
-	{
-		if (Transi_4to0 == 1)
-		{
-			Etat = 0;
+			Etat = HOME;
 			Change = 1 ;
 			Transi_4to0 = 0 ;
 		}
-		if (Transi_4to4 == 1)
+		else if (Transi_4to4)
 		{
-			Etat = 4;
-			Change = 1 ;
-			Transi_4to4 = 0 ;
+			Etat = SENSOR_MODE;
+			Change = 1;
+			Transi_4to4 = 0;
 		}
+		break;
+
+	default : break;
 	}
 
 	return (Change);
@@ -234,47 +246,44 @@ char  Change_Etat(void)
 void Modifie_Etat(void)
 /****************************************************************/
 {
-
-	if (Etat == 0)
+	switch(Etat)
 	{
-		// Etat Accueil
+	case HOME :
 		Creer_Ecran_Acceuil();
 		Run_Tempo();
 		Num_Prog_Courant = 0;
 		Prog_Selected = 0;
-	}
-	if (Etat == 1)
-	{
-		// Etat Reglage Heure
+		break;
+
+	case TIME_CONFIGURATION_MODE :
 		Creer_Ecran_Regle_Heure();
-	}
-	if (Etat == -1)
-	{
-		// Etat Ecran Mode Veille
+		break;
+
+	case SLEEP_MODE :
 		LCD_DisplayOff();
-	}
-	if (Etat == 2)
-	{
-		// Etat Mode Pilotage Manuel
+		break;
+
+	case MANUAL_OPERATION_MODE :
 		Transi_0to2 = 0;
 		Creer_Ecran_Marche();
 		Refresh_Slider(Compteur_Marche_Pompe);
-	}
-	if (Etat == 30)
-	{
-		// Etat Réglage Programme
-		Transi_30to30 = 0;
+		break;
+
+	case PROGRAM_CONFIGURATION_MODE :
+		Transi_5to5 = 0;
 		Creer_Ecran_Regle_Prog();
-	}
-	if (Etat == 3)
-	{
-		// Etat Lancement de Programme
-		Creer_Ecran_Lancer_Prog() ;
-	}
-	if (Etat== 4)
-	{
-		// Etat Mode Capteur
-		Creer_Ecran_Lancer_Capteur() ;
+		break;
+
+	case PROGRAM_MODE :
+		Creer_Ecran_Lancer_Prog();
+		break;
+
+	case SENSOR_MODE :
+		Creer_Ecran_Lancer_Capteur();
+		break;
+
+	default : break;
+
 	}
 
 }
@@ -285,18 +294,22 @@ void Modifie_Etat(void)
 void Refresh_Etat(void)
 /****************************************************************/
 {
-	if (Etat == 0)
+	switch (Etat)
 	{
+	case HOME :
 		// Affichage heure et date sur l'accueil
 		HAL_RTC_GetTime(&RTC_F746, &Time_RTCF746, RTC_FORMAT_BIN);
 		Change_Heure(Time_RTCF746.Hours, Time_RTCF746.Minutes, Time_RTCF746.Seconds);
 		HAL_RTC_GetDate(&RTC_F746, &Date_RTCF746, RTC_FORMAT_BIN);
 		Change_Date(Date_RTCF746.Date, Date_RTCF746.Month, Date_RTCF746.Year);
 		lv_task_handler();
-	}
-	if (Etat == 2)
-	{
+		break;
+
+	case MANUAL_OPERATION_MODE :
 		Refresh_Slider(Compteur_Marche_Pompe);
+		break;
+
+	default : break;
 	}
 }
 

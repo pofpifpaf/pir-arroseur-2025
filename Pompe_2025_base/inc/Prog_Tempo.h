@@ -28,7 +28,7 @@
 	void Lire_Data_Prog( Data_Prog_Typedef *);
 	void Stocke_Data_Prog(Data_Prog_Typedef *);
 	char isInProgram(Data_Prog_Typedef  * , RTC_TimeTypeDef, RTC_DateTypeDef );
-	void calculateStopTime(Data_Prog_Typedef  *);
+	void reformatData(Data_Prog_Typedef  *);
 	void Verif_Programme(void);
 	void Gestion_Priorites(void);
 

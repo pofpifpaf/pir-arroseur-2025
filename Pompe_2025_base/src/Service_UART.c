@@ -81,7 +81,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 
 
-
+// this entails that there is no other reception in between each 3 bytes.
 void Verif_UART()
 {
 	if (counter >= 2)

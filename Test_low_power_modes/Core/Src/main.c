@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "Driver_USART_HAL.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -49,7 +50,7 @@ UART_HandleTypeDef huart2;
 RTC_HandleTypeDef hrtc;
 
 /* USER CODE BEGIN PV */
-
+uint16_t sensorValue= 42;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -66,6 +67,7 @@ static void MX_RTC_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 char wake_up_type = 0;
+uint32_t rtc_flag;
 /* USER CODE END 0 */
 
 /**
@@ -76,7 +78,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -98,10 +99,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC_Init();
-  MX_LPUART1_UART_Init();
   MX_USART2_UART_Init();
   MX_RTC_Init();
+  // peut être mettre un délai?
   /* USER CODE BEGIN 2 */
+//  rtc_flag = __HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF);
 
   /* ### Indicator light : STM32 is ON ### */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
@@ -110,34 +112,39 @@ int main(void)
   /* STEP 1 : Check if the stand by (SBF - Stand By Flag) mode is set => Test if the STM is waking up from SB mode */
   if (__HAL_PWR_GET_FLAG(PWR_FLAG_SB) != RESET)
   {
-	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB); //Clear SBF
+    __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB); //Clear SBF
 
-	  /* STEP 2 : Detect wake up source (Wake-up pin or RTC Alarm) */
-	  if (__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF)) {
-		  wake_up_type = 1; // Wake up from RTC Alarm
-	  }
-	  else {
-		  wake_up_type = 2; // Wake up from Reset Pin
-	  }
+    /* STEP 2 : Detect wake up source (Wake-up pin or RTC Alarm) */
+    if (__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF)) {
+      // Wake up from RTC Alarm
 
-	  /* STEP 3 : Blink led depending on the wake up source (Wake-up pin or RTC Alarm) */
-	  for (int i=0 ; i<wake_up_type ; i++) /* 1 blink ==> RTC Alarm WU ; 2 blink ==> Wake Up Pin */
-	  {
-		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-		  HAL_Delay(500);
-		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
-		  HAL_Delay(500);
-	  }
 
-	  /* STEP 4 : Disable the wake up pin (A0) */
-	  HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);
+      Send_Trame(1, DATA_HUM, getValue(&hadc), &huart2);
+    }
+    else {
+      // Wake up from Reset Pin
+      Send_Trame(1, DATA_SWITCH, 0, &huart2);
+      HAL_Delay(500);
+    }
 
-	  /* STEP 5 : Disable RTC Wake Up */
-	  HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
+    /* STEP 3 : Blink led depending on the wake up source (Wake-up pin or RTC Alarm) */
+//    for (int i=0 ; i<wake_up_type ; i++) /* 1 blink ==> RTC Alarm WU ; 2 blink ==> Wake Up Pin */
+//    {
+//      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+//      HAL_Delay(500);
+//      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
+//      HAL_Delay(500);
+//    }
+
+    /* STEP 4 : Disable the wake up pin (A0) */
+    HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);
+
+    /* STEP 5 : Disable RTC Wake Up */
+    HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
   }
 
   /* ### Program ### */
-  HAL_Delay(3000);
+//  HAL_Delay(3000);
   /* ### End program ### */
 
   /* ### Enter STAND-BY mode ### */
@@ -146,14 +153,14 @@ int main(void)
   __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&hrtc, RTC_FLAG_WUTF); //Clear RTC Wake Up Flag
 
   /* STEP 2 : Blink led */
-  for (int i=0 ; i<20 ; i++)
-  {
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_3);
-  	HAL_Delay(100);
-  }
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-  HAL_Delay(2000);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
+//  for (int i=0 ; i<20 ; i++)
+//  {
+//    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_3);
+//    HAL_Delay(100);
+//  }
+//  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+//  HAL_Delay(2000);
+//  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
 
   /* STEP 3 : Enable the Wake-Up (WU) pin */
   HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);
@@ -170,7 +177,7 @@ int main(void)
    */
   if (HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 0x9C40, RTC_WAKEUPCLOCK_RTCCLK_DIV16) != HAL_OK)
   {
-	 Error_Handler();
+   Error_Handler();
   }
 
   /* STEP 5 : Enter Stand-by mode */
@@ -354,7 +361,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -406,13 +413,11 @@ static void MX_RTC_Init(void)
 
   /** Enable the WakeUp
   */
-  /* The following lines are comments because they were causing some bugs regarding the detection of the wake up reason */
 //  if (HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 0, RTC_WAKEUPCLOCK_RTCCLK_DIV16) != HAL_OK)
 //  {
 //    Error_Handler();
 //  }
   /* USER CODE BEGIN RTC_Init 2 */
-
   /* USER CODE END RTC_Init 2 */
 
 }

@@ -15,7 +15,7 @@
 #include "lvgl/lvgl.h"
 
 extern unsigned int Etat;
-extern char Transi_30to0, Transi_0to30, Transi_30to30;
+extern char Transi_5to0, Transi_0to5, Transi_5to5;
 extern char Num_Prog_Courant;
 extern Data_Prog_Typedef Data_Prog;
 
@@ -280,9 +280,9 @@ void Bouton_Retour_Regle_Prog(void) {
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	static lv_style_t style_pr;
-	static lv_style_transition_dsc_t trans;
-	static lv_style_prop_t props[] = { LV_STYLE_OUTLINE_WIDTH,
-			LV_STYLE_OUTLINE_OPA, 0 };
+//	static lv_style_transition_dsc_t trans;
+//	static lv_style_prop_t props[] = { LV_STYLE_OUTLINE_WIDTH,
+//			LV_STYLE_OUTLINE_OPA, 0 };
 
 	lv_style_init(&style);
 
@@ -351,7 +351,7 @@ void event_handler_BoutonRetour_Regle_Prog(lv_event_t *e) {
 	lv_event_code_t code = lv_event_get_code(e);
 
 	if (code == LV_EVENT_PRESSED) {
-		Transi_30to0 = 1;
+		Transi_5to0 = 1;
 		Stocke_Data_Prog(&Data_Prog);
 	}
 }
@@ -360,9 +360,9 @@ void Bouton_Prog_Suivant(void) {
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	static lv_style_t style_pr;
-	static lv_style_transition_dsc_t trans;
-	static lv_style_prop_t props[] = { LV_STYLE_OUTLINE_WIDTH,
-			LV_STYLE_OUTLINE_OPA, 0 };
+//	static lv_style_transition_dsc_t trans;
+//	static lv_style_prop_t props[] = { LV_STYLE_OUTLINE_WIDTH,
+//			LV_STYLE_OUTLINE_OPA, 0 };
 
 	lv_style_init(&style);
 
@@ -434,7 +434,7 @@ void event_handler_BoutonProg_Suivant(lv_event_t *e) {
 	if (code == LV_EVENT_PRESSED) {
 		Stocke_Data_Prog(&Data_Prog);
 		Increment_Numeprog();
-		Transi_30to30 = 1;
+		Transi_5to5 = 1;
 	}
 }
 
@@ -442,9 +442,9 @@ void Bouton_Prog_Precedent(void) {
 	/*Init the style for the default state*/
 	static lv_style_t style;
 	static lv_style_t style_pr;
-	static lv_style_transition_dsc_t trans;
-	static lv_style_prop_t props[] = { LV_STYLE_OUTLINE_WIDTH,
-			LV_STYLE_OUTLINE_OPA, 0 };
+//	static lv_style_transition_dsc_t trans;
+//	static lv_style_prop_t props[] = { LV_STYLE_OUTLINE_WIDTH,
+//			LV_STYLE_OUTLINE_OPA, 0 };
 
 	lv_style_init(&style);
 
@@ -514,7 +514,7 @@ void event_handler_BoutonProg_Precedent(lv_event_t *e) {
 	lv_event_code_t code = lv_event_get_code(e);
 
 	if (code == LV_EVENT_PRESSED) {
-		Transi_30to30 = 1;
+		Transi_5to5 = 1;
 		Stocke_Data_Prog(&Data_Prog);
 		Decrement_Numeprog();
 	}
