@@ -18,12 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "Driver_USART_HAL.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include <stdio.h>
+#include "Driver_USART_HAL.h"
+#include "LOW_POWER_PMOS.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,26 +39,26 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define NUM_CAPTEUR (1)
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc;
 
-UART_HandleTypeDef hlpuart1;
-UART_HandleTypeDef huart2;
-
 RTC_HandleTypeDef hrtc;
 
+UART_HandleTypeDef huart2;
+
 /* USER CODE BEGIN PV */
-uint16_t sensorValue= 42;
+uint16_t sensorValue = 42;
+uint8_t rx_data;
+uint8_t isRec = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ADC_Init(void);
-static void MX_LPUART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_RTC_Init(void);
 /* USER CODE BEGIN PFP */
@@ -101,9 +102,8 @@ int main(void)
   MX_ADC_Init();
   MX_USART2_UART_Init();
   MX_RTC_Init();
-  // peut être mettre un délai?
   /* USER CODE BEGIN 2 */
-//  rtc_flag = __HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF);
+
 
   /* ### Indicator light : STM32 is ON ### */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
@@ -117,24 +117,22 @@ int main(void)
     /* STEP 2 : Detect wake up source (Wake-up pin or RTC Alarm) */
     if (__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF)) {
       // Wake up from RTC Alarm
-
-
-      Send_Trame(1, DATA_HUM, getValue(&hadc), &huart2);
+      Send_Trame(NUM_CAPTEUR, DATA_HUM, getValue(&hadc), &huart2);
     }
     else {
       // Wake up from Reset Pin
-      Send_Trame(1, DATA_SWITCH, 0, &huart2);
-      HAL_Delay(500);
-    }
+      Send_Trame(NUM_CAPTEUR, DATA_SWITCH, 0, &huart2);
+      HAL_UART_Receive_IT(&huart2, &rx_data, 1);
+      HAL_Delay(10000);
 
-    /* STEP 3 : Blink led depending on the wake up source (Wake-up pin or RTC Alarm) */
-//    for (int i=0 ; i<wake_up_type ; i++) /* 1 blink ==> RTC Alarm WU ; 2 blink ==> Wake Up Pin */
-//    {
-//      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-//      HAL_Delay(500);
-//      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
-//      HAL_Delay(500);
-//    }
+      if (isRec && isAck(NUM_CAPTEUR, DATA_SWITCH, rx_data))
+      {
+    	  LED_ON();
+          Send_Trame(3, DATA_SWITCH, 0, &huart2);
+    	  HAL_Delay(1000);
+    	  LED_OFF();
+      }
+    }
 
     /* STEP 4 : Disable the wake up pin (A0) */
     HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);
@@ -143,29 +141,17 @@ int main(void)
     HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
   }
 
-  /* ### Program ### */
-//  HAL_Delay(3000);
-  /* ### End program ### */
+  XBEE_OFF();
 
   /* ### Enter STAND-BY mode ### */
   /* STEP 1 : Clear the Wake-Up (WU) flag and RTC Wake-Up Timer (WUTF) flag*/
   __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU); //Clear Wake Up Flag
   __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&hrtc, RTC_FLAG_WUTF); //Clear RTC Wake Up Flag
 
-  /* STEP 2 : Blink led */
-//  for (int i=0 ; i<20 ; i++)
-//  {
-//    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_3);
-//    HAL_Delay(100);
-//  }
-//  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-//  HAL_Delay(2000);
-//  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
-
-  /* STEP 3 : Enable the Wake-Up (WU) pin */
+  /* STEP 2 : Enable the Wake-Up (WU) pin */
   HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);
 
-  /* STEP 4 : Enable RTC Alarm Wake up*/
+  /* STEP 3 : Enable RTC Alarm Wake up*/
   /* Details : RTC Wake-Up Interrupt Generation
    * Wake-up time base = (RTC_WAKEUPCLOCK_RTCCLK_DIV /(LSI))
    * ==> WakeUpCounter = Wake-up time / Wake-up time base
@@ -180,7 +166,7 @@ int main(void)
    Error_Handler();
   }
 
-  /* STEP 5 : Enter Stand-by mode */
+  /* STEP 4 : Enter Stand-by mode */
   HAL_PWR_EnterSTANDBYMode();
 
   /* USER CODE END 2 */
@@ -244,10 +230,8 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2|RCC_PERIPHCLK_LPUART1
-                              |RCC_PERIPHCLK_RTC;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2|RCC_PERIPHCLK_RTC;
   PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
-  PeriphClkInit.Lpuart1ClockSelection = RCC_LPUART1CLKSOURCE_PCLK1;
   PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
@@ -312,75 +296,6 @@ static void MX_ADC_Init(void)
 }
 
 /**
-  * @brief LPUART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_LPUART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN LPUART1_Init 0 */
-
-  /* USER CODE END LPUART1_Init 0 */
-
-  /* USER CODE BEGIN LPUART1_Init 1 */
-
-  /* USER CODE END LPUART1_Init 1 */
-  hlpuart1.Instance = LPUART1;
-  hlpuart1.Init.BaudRate = 209700;
-  hlpuart1.Init.WordLength = UART_WORDLENGTH_7B;
-  hlpuart1.Init.StopBits = UART_STOPBITS_1;
-  hlpuart1.Init.Parity = UART_PARITY_NONE;
-  hlpuart1.Init.Mode = UART_MODE_TX_RX;
-  hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&hlpuart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN LPUART1_Init 2 */
-
-  /* USER CODE END LPUART1_Init 2 */
-
-}
-
-/**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART2_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART2_Init 0 */
-
-  /* USER CODE END USART2_Init 0 */
-
-  /* USER CODE BEGIN USART2_Init 1 */
-
-  /* USER CODE END USART2_Init 1 */
-  huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
-  huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART2_Init 2 */
-
-  /* USER CODE END USART2_Init 2 */
-
-}
-
-/**
   * @brief RTC Initialization Function
   * @param None
   * @retval None
@@ -418,7 +333,54 @@ static void MX_RTC_Init(void)
 //    Error_Handler();
 //  }
   /* USER CODE BEGIN RTC_Init 2 */
+
+  ///////////////// To ensure RTC wake up
+  ///////////////// Make sure to have this, in comments, before :
+
+  //  if (HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 0, RTC_WAKEUPCLOCK_RTCCLK_DIV16) != HAL_OK)
+  //  {
+  //    Error_Handler();
+  //  }
+
   /* USER CODE END RTC_Init 2 */
+
+}
+
+/**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 9600;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+  if (HAL_UART_Receive_IT(&huart2, &rx_data, 1) != HAL_OK)
+	{
+		Error_Handler();
+	}
+  /* USER CODE END USART2_Init 2 */
 
 }
 
@@ -463,6 +425,14 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if (huart->Instance == USART2)
+	{
+//		HAL_UART_Transmit(&huart2, &rx_data, 1, HAL_MAX_DELAY);
+		isRec = 1;
+	}
+}
 
 /* USER CODE END 4 */
 

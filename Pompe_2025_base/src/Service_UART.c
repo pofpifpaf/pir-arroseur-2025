@@ -68,8 +68,6 @@ void Transmit_Ack(uint8_t n_capt, uint8_t type_data, uint8_t ack)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-
-
 	if (counter < BUFFER_SIZE - 1)
 	{
 		data_buffer[counter] = data_in;

@@ -1,5 +1,6 @@
 
 #include "Driver_USART_HAL.h"
+#include "LOW_POWER_PMOS.h"
 
 void Send_Trame (uint8_t NumCapteur, uint8_t TypeDonnee, uint16_t Info, UART_HandleTypeDef* huart){
 	//Définition du delai utilisé pour le transmit
@@ -21,9 +22,11 @@ void Send_Trame (uint8_t NumCapteur, uint8_t TypeDonnee, uint16_t Info, UART_Han
 
 int getValue(ADC_HandleTypeDef* hadc)
 {
-	HAL_ADC_Start(&hadc);
-	HAL_ADC_PollForConversion(&hadc, 100);
-	int sensorValue = HAL_ADC_GetValue(&hadc);
+	SENSOR_ON();
+	HAL_ADC_Start(hadc);
+	HAL_ADC_PollForConversion(hadc, 100);
+	int sensorValue = HAL_ADC_GetValue(hadc);
+	SENSOR_OFF();
 
 	if (sensorValue < 2375)
 	{
@@ -33,8 +36,9 @@ int getValue(ADC_HandleTypeDef* hadc)
 		sensorValue = 0.6 + (sensorValue-2375)*const2;
 	}
 
-	return 100*sensorValue;
+	return 100 * sensorValue;
 }
+
 
 int isAck(uint8_t NumCapteur, uint8_t TypeDonnee, uint8_t OctetRecu) {
     return ((OctetRecu >> 4) == NumCapteur) && (((OctetRecu >> 1) & 0x7) == TypeDonnee) && ((OctetRecu & 1) == 1);
