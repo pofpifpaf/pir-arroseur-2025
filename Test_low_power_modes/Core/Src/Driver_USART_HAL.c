@@ -26,7 +26,7 @@ int getValue(ADC_HandleTypeDef* hadc)
 	HAL_ADC_Start(hadc);
 	HAL_ADC_PollForConversion(hadc, 100);
 	int sensorValue = HAL_ADC_GetValue(hadc);
-	SENSOR_OFF();
+//	SENSOR_OFF();
 
 	if (sensorValue < 2375)
 	{

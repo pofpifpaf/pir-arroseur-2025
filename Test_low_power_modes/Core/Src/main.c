@@ -87,7 +87,6 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -103,10 +102,18 @@ int main(void)
   MX_USART2_UART_Init();
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
+  rtc_flag = __HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF);
 
+  XBEE_ON();
+  SENSOR_ON();
 
   /* ### Indicator light : STM32 is ON ### */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+
+  //de
+  HAL_Delay(5000);
+  Send_Trame(4, DATA_SWITCH, 0, &huart2);
+
 
   /* ### Wake up from STAND-BY mode ### */
   /* STEP 1 : Check if the stand by (SBF - Stand By Flag) mode is set => Test if the STM is waking up from SB mode */
@@ -115,7 +122,7 @@ int main(void)
     __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB); //Clear SBF
 
     /* STEP 2 : Detect wake up source (Wake-up pin or RTC Alarm) */
-    if (__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF)) {
+    if (__HAL_RTC_WAKEUPTIMER_GET_FLAG(&hrtc, RTC_FLAG_WUTF) || rtc_flag) {
       // Wake up from RTC Alarm
       Send_Trame(NUM_CAPTEUR, DATA_HUM, getValue(&hadc), &huart2);
     }
@@ -130,7 +137,7 @@ int main(void)
     	  LED_ON();
           Send_Trame(3, DATA_SWITCH, 0, &huart2);
     	  HAL_Delay(1000);
-    	  LED_OFF();
+//    	  LED_OFF();
       }
     }
 
@@ -141,7 +148,14 @@ int main(void)
     HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
   }
 
-  XBEE_OFF();
+  Send_Trame(6, DATA_SWITCH, 0, &huart2);
+
+//  XBEE_OFF();
+//  while (1)
+//  {
+//	  Send_Trame(3, DATA_SWITCH, 0, &huart2);
+//	  HAL_Delay(500);
+//  }
 
   /* ### Enter STAND-BY mode ### */
   /* STEP 1 : Clear the Wake-Up (WU) flag and RTC Wake-Up Timer (WUTF) flag*/
@@ -401,13 +415,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PA1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  /*Configure GPIO pins : PA1 PA2 PA3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

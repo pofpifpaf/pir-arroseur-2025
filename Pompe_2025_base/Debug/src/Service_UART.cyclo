@@ -2,4 +2,4 @@
 ../src/Service_UART.c:30:6:Init_UART	2
 ../src/Service_UART.c:58:6:Transmit_Ack	1
 ../src/Service_UART.c:69:6:HAL_UART_RxCpltCallback	2
-../src/Service_UART.c:85:6:Verif_UART	8
+../src/Service_UART.c:83:6:Verif_UART	8
