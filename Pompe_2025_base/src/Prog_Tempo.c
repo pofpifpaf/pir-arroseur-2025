@@ -10,6 +10,7 @@
 #include <Service_UART.h>
 #include <Prog_Tempo.h>
 #include <Ecran_Lancer_Prog.h>
+#include <Ecran_Lancer_Capteur.h>
 #include "Utility_Flash.h"
 
 #include <Ecran_Accueil.h>
@@ -17,25 +18,28 @@
 #include <Service_Timer.h>
 #include <Machine_Etat.h>
 #include "lvgl/lvgl.h"
-#include <Projet.h>
 #include "RTC_Function.h"
 
+#include <Globals.h>
 
 
-
-
-
-char Num_Prog_Courant;
-Data_Prog_Typedef  Data_Prog;
+extern char Num_Prog_Courant;
+extern Data_Prog_Typedef  Data_Prog;
 
 extern char Prog_En_Marche[8];
-extern int Etat ;
-extern int Mode_Manuel ;
+extern int Etat;
+extern int Mode_Manuel;
 
 
 extern RTC_HandleTypeDef RTC_F746;
 extern RTC_TimeTypeDef Time_RTCF746;
 extern RTC_DateTypeDef Date_RTCF746;
+
+extern int capteur_active;
+
+extern uint8_t mode;
+extern uint8_t received_toggle_prise;
+extern uint8_t zone;
 
 
 
@@ -46,10 +50,7 @@ void Increment_Numeprog(void)
 {
 	Num_Prog_Courant = Num_Prog_Courant + 1;
 
-	if (Num_Prog_Courant > NumProgMax)
-	{
-		Num_Prog_Courant = 1;
-	}
+	if (Num_Prog_Courant > NumProgMax) Num_Prog_Courant = 1;
 }
 
 
@@ -60,13 +61,9 @@ void Decrement_Numeprog(void)
 {
 	Num_Prog_Courant = Num_Prog_Courant - 1;
 
-	if (Num_Prog_Courant < 1)
-	{
-		Num_Prog_Courant = NumProgMax;
-	}
+	if (Num_Prog_Courant < 1) Num_Prog_Courant = NumProgMax;
 }
 
-// Faire en sorte qu'il écrit pas en flash à chaque fois
 /******************************************************************/
 /* Initialisation des données des programmes                      */
 /* Ram[0] = Actif                                                 */
@@ -143,11 +140,11 @@ void Verif_Programme()
 
 		if (isInProgram(&Data_Prog, Time_RTCF746, Date_RTCF746))
 		{
-			Allume_Prise();
+			Set_Outlet_ON();
 		}
 		else
 		{
-			Eteint_Prise();
+			Set_Outlet_OFF();
 		}
 }
 
@@ -202,14 +199,71 @@ char isInProgram(Data_Prog_Typedef* Data, RTC_TimeTypeDef Time_RTCF746, RTC_Date
 	return inProgram;
 }
 
+uint8_t prev_zone = 0;
+uint8_t compteur_toggle = 0;
 
+//
+//
+//
 void Gestion_Priorites(void)
 {
-	if ((!Mode_Manuel) && (Etat != 30))
+	UART_Reception_Collection();
+
+	if (received_toggle_prise)
 	{
-		Verif_Programme();
-		Verif_UART();
+		if (compteur_toggle > 10000) // approximately 100s
+		{
+			compteur_toggle = 0;
+			received_toggle_prise = 0;
+		}
+		else
+		{
+			compteur_toggle++;
+		}
 	}
+
+	if (capteur_active && !received_toggle_prise && (!Mode_Manuel) && (Etat != PROGRAM_CONFIGURATION_MODE))
+	{
+		switch (mode)
+		{
+		case MODE_HYSTERESIS :
+
+			if (prev_zone == 0 && (zone == 1 || zone == 2))
+			{
+				Set_Outlet_OFF();
+			}
+			if (prev_zone == 2 && (zone == 0 || zone == 1))
+			{
+				Set_Outlet_ON();
+			}
+			break;
+
+		case MODE_TWOTHRESHOLD :
+
+			switch (zone)
+			{
+			case 0 :
+				Set_Outlet_ON();
+				break;
+			case 1 :
+				Verif_Programme();
+				break;
+			case 2 :
+				Set_Outlet_OFF();
+				break;
+			default :
+				break;
+			}
+
+			break;
+
+		default :
+			break;
+		}
+
+		prev_zone = zone;
+	}
+
 }
 
 

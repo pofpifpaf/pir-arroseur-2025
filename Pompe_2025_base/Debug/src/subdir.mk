@@ -5,6 +5,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../src/Globals.c \
 ../src/Machine_Etat.c \
 ../src/Prog_Tempo.c \
 ../src/RTC_Function.c \
@@ -15,6 +16,7 @@ C_SRCS += \
 ../src/main.c 
 
 OBJS += \
+./src/Globals.o \
 ./src/Machine_Etat.o \
 ./src/Prog_Tempo.o \
 ./src/RTC_Function.o \
@@ -25,6 +27,7 @@ OBJS += \
 ./src/main.o 
 
 C_DEPS += \
+./src/Globals.d \
 ./src/Machine_Etat.d \
 ./src/Prog_Tempo.d \
 ./src/RTC_Function.d \
@@ -42,7 +45,7 @@ src/%.o src/%.su src/%.cyclo: ../src/%.c src/subdir.mk
 clean: clean-src
 
 clean-src:
-	-$(RM) ./src/Machine_Etat.cyclo ./src/Machine_Etat.d ./src/Machine_Etat.o ./src/Machine_Etat.su ./src/Prog_Tempo.cyclo ./src/Prog_Tempo.d ./src/Prog_Tempo.o ./src/Prog_Tempo.su ./src/RTC_Function.cyclo ./src/RTC_Function.d ./src/RTC_Function.o ./src/RTC_Function.su ./src/Service_GPIO.cyclo ./src/Service_GPIO.d ./src/Service_GPIO.o ./src/Service_GPIO.su ./src/Service_Timer.cyclo ./src/Service_Timer.d ./src/Service_Timer.o ./src/Service_Timer.su ./src/Service_UART.cyclo ./src/Service_UART.d ./src/Service_UART.o ./src/Service_UART.su ./src/Utility_Flash.cyclo ./src/Utility_Flash.d ./src/Utility_Flash.o ./src/Utility_Flash.su ./src/main.cyclo ./src/main.d ./src/main.o ./src/main.su
+	-$(RM) ./src/Globals.cyclo ./src/Globals.d ./src/Globals.o ./src/Globals.su ./src/Machine_Etat.cyclo ./src/Machine_Etat.d ./src/Machine_Etat.o ./src/Machine_Etat.su ./src/Prog_Tempo.cyclo ./src/Prog_Tempo.d ./src/Prog_Tempo.o ./src/Prog_Tempo.su ./src/RTC_Function.cyclo ./src/RTC_Function.d ./src/RTC_Function.o ./src/RTC_Function.su ./src/Service_GPIO.cyclo ./src/Service_GPIO.d ./src/Service_GPIO.o ./src/Service_GPIO.su ./src/Service_Timer.cyclo ./src/Service_Timer.d ./src/Service_Timer.o ./src/Service_Timer.su ./src/Service_UART.cyclo ./src/Service_UART.d ./src/Service_UART.o ./src/Service_UART.su ./src/Utility_Flash.cyclo ./src/Utility_Flash.d ./src/Utility_Flash.o ./src/Utility_Flash.su ./src/main.cyclo ./src/main.d ./src/main.o ./src/main.su
 
 .PHONY: clean-src
 

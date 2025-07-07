@@ -1,4 +1,5 @@
-../src/Service_GPIO.c:12:6:Init_GPIO	1
-../src/Service_GPIO.c:104:6:EXTI9_5_IRQHandler	1
-../src/Service_GPIO.c:114:6:Allume_Prise	1
-../src/Service_GPIO.c:124:6:Eteint_Prise	1
+../src/Service_GPIO.c:11:6:Init_GPIO	1
+../src/Service_GPIO.c:91:6:EXTI9_5_IRQHandler	1
+../src/Service_GPIO.c:98:6:Set_Outlet_ON	1
+../src/Service_GPIO.c:105:6:Set_Outlet_OFF	1
+../src/Service_GPIO.c:112:6:Toggle_Outlet	2

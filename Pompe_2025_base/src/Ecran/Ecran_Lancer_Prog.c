@@ -6,16 +6,19 @@
  */
 #include "stm32f7xx.h"
 #include "lvgl/lvgl.h"
-#include <Ecran_Lancer_Prog.h>
 #include <stdlib.h>
+
+#include <Ecran_Lancer_Prog.h>
 #include <Machine_Etat.h>
+
+#include <Globals.h>
 
 extern char Transi_3to0;
 extern char Transi_3to3 ;
 
-char Prog_Selected ;
-char Prog_En_Marche[8] ;
-int i ;
+extern char Prog_Selected;
+extern char Prog_En_Marche[8];
+
 lv_obj_t * Texte2;
 int Texte2_A_Effacer = 0 ;
 

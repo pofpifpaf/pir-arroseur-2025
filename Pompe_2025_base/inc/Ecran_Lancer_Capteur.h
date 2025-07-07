@@ -8,8 +8,12 @@
 #ifndef ECRAN_LANCER_CAPTEUR_H_
 #define ECRAN_LANCER_CAPTEUR_H_
 
+#define MODE_HYSTERESIS 1
+#define MODE_TWOTHRESHOLD 2
+
 void Creer_Ecran_Lancer_Capteur(void);
 void Creer_Slider_Capteur(void);
+void Bouton_Mode_Capteur(void);
 void Bouton_Retour_Capteur(void);
 void Bouton_Appliquer_Capteur(void);
 void Afficher_Texte_Capteur(void);

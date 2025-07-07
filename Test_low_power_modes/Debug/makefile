@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := Test low power modes
+BUILD_ARTIFACT_NAME := Test_low_power_modes
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Test\ low\ power\ modes.elf \
+Test_low_power_modes.elf \
 
 MAP_FILES += \
-Test\ low\ power\ modes.map \
+Test_low_power_modes.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-Test\ low\ power\ modes.list \
+Test_low_power_modes.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: Test\ low\ power\ modes.elf secondary-outputs
+main-build: Test_low_power_modes.elf secondary-outputs
 
 # Tool invocations
-Test\ low\ power\ modes.elf Test\ low\ power\ modes.map: $(OBJS) $(USER_OBJS) C:\Users\adamg\OneDrive\Documents\1travail\INSA\4A\S8\pir\pir-arroseur-2025\Test_low_power_modes\STM32L031K6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Test low power modes.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\adamg\OneDrive\Documents\1travail\INSA\4A\S8\pir\pir-arroseur-2025\Test_low_power_modes\STM32L031K6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Test low power modes.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Test_low_power_modes.elf Test_low_power_modes.map: $(OBJS) $(USER_OBJS) C:\Users\adamg\OneDrive\Documents\1travail\INSA\4A\S8\pir\pir-arroseur-2025\Test_low_power_modes\STM32L031K6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Test_low_power_modes.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\adamg\OneDrive\Documents\1travail\INSA\4A\S8\pir\pir-arroseur-2025\Test_low_power_modes\STM32L031K6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Test_low_power_modes.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Test\ low\ power\ modes.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Test low power modes.list"
+Test_low_power_modes.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Test_low_power_modes.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) Test\ low\ power\ modes.elf Test\ low\ power\ modes.list Test\ low\ power\ modes.map Test\\ low\\ power\\ modes.elf default.size.stdout
+	-$(RM) Test_low_power_modes.elf Test_low_power_modes.list Test_low_power_modes.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

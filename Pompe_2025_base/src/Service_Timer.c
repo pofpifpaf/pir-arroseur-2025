@@ -7,9 +7,9 @@
 
 #include "stm32f7xx_hal.h"
 #include "Machine_Etat.h"
+#include <Globals.h>
 
 TIM_HandleTypeDef TimHandle;
-
 
 extern char Fin_Tempo;
 extern int Compteur_Marche_Pompe;

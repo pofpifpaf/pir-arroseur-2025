@@ -2,7 +2,6 @@
 #include <Machine_Etat.h>
 #include "stm32f7xx.h"
 #include "lvgl/lvgl.h"
-#include <Projet.h>
 #include <Prog_Tempo.h>
 #include "RTC_Function.h"
 #include "Utility_Flash.h"
@@ -16,6 +15,8 @@
 #include "hal_stm_lvgl/tft/tft.h"
 #include "hal_stm_lvgl/touchpad/touchpad.h"
 
+#include <Globals.h>
+
 
 void Error_Handler(void);
 static void SystemClock_Config(void);
@@ -23,19 +24,16 @@ void PeriphCommonClock_Config(void);
 
 
 
-GPIO_InitTypeDef MonGPIO_Init;
-char state;   /*  Variable globale qui gère la machine à état */
-
-RTC_TimeTypeDef Time_RTCF746;
-RTC_DateTypeDef Date_RTCF746;
+extern RTC_TimeTypeDef Time_RTCF746;
+extern RTC_DateTypeDef Date_RTCF746;
 
 extern char Transi_2to0;
 extern int Etat;
+
 extern Data_Prog_Typedef Data_Prog;
 
-int DATA_32[4] = {0xA2345679,0xbbeeaa55,0xcccc2222,0xabcdef} ;
-char DATA_8[8] = {1,2,3,4,5,6,7,8} ;
-char Vide[32];
+
+
 
 int main(void)
 {

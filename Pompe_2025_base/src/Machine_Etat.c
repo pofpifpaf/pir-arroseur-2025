@@ -24,9 +24,10 @@
 #include "hal_stm_lvgl/tft/tft.h"
 #include "hal_stm_lvgl/touchpad/touchpad.h"
 #include "lvgl/lvgl.h"
-#include <Projet.h>
 
-int Etat;
+#include <Globals.h>
+
+extern int Etat;
 
 extern void LCD_DisplayOn(void);
 extern void LCD_DisplayOff(void);
@@ -44,31 +45,33 @@ extern void LCD_DisplayOff(void);
 
  */
 
-char Change;
-char Transi_0to1, Transi_1to0;
-char Transi_0to3, Transi_3to0, Transi_3to3;
-char Transi_0to2, Transi_2to0;
-char Transi_4to0, Transi_0to4, Transi_4to4;
-char Transi_5to0, Transi_0to5, Transi_5to5;
+extern char Change;
+extern char Transi_0to1, Transi_1to0;
+extern char Transi_0to3, Transi_3to0, Transi_3to3;
+extern char Transi_0to2, Transi_2to0;
+extern char Transi_4to0, Transi_0to4, Transi_4to4;
+extern char Transi_5to0, Transi_0to5, Transi_5to5;
 
-int Bouton = 0;
-int Default = 1 ;
-char Start_Button_Pushed;
-char Fin_Tempo;
-char Minute60Sec ;
-int Compteur_Marche_Pompe = 20 ;
+extern int Bouton;
+extern int Default;
+extern char Start_Button_Pushed;
+extern char Fin_Tempo;
+extern char Minute60Sec ;
+extern int Compteur_Marche_Pompe;
 TS_StateTypeDef  TS_State;
 
 extern char Prog_Selected ;
-extern char Prog_En_Marche[8] ;
+extern char Prog_En_Marche[8];
+extern RTC_HandleTypeDef RTC_F746;
+extern RTC_TimeTypeDef Time_RTCF746;
+extern RTC_DateTypeDef Date_RTCF746;
+
 extern lv_obj_t * spinner ;
 extern lv_obj_t * Texte_Marche;
 extern int A_Effacer ;
 extern int TempoMini ;
 extern int Mode_Manuel ;
-extern RTC_HandleTypeDef RTC_F746;
-extern RTC_TimeTypeDef Time_RTCF746;
-extern RTC_DateTypeDef Date_RTCF746;
+
 extern char Num_Prog_Courant;
 
 
@@ -210,7 +213,7 @@ char Change_Etat(void)
 
 			A_Effacer = 0;
 
-			Eteint_Prise();
+			Set_Outlet_OFF();
 			Stop_Pompe_1sec();
 
 			Compteur_Marche_Pompe = TempoMini;
@@ -223,8 +226,8 @@ char Change_Etat(void)
 		if (Transi_4to0)
 		{
 			Etat = HOME;
-			Change = 1 ;
-			Transi_4to0 = 0 ;
+			Change = 1;
+			Transi_4to0 = 0;
 		}
 		else if (Transi_4to4)
 		{

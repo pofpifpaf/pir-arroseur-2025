@@ -10,6 +10,8 @@
 #include <Service_GPIO.h>
 #include <Service_Timer.h>
 
+#include <Globals.h>
+
 
 #include "lvgl/lvgl.h"
 
@@ -21,7 +23,7 @@ void event_handler_BoutonActiver_Pompe(lv_event_t *e);
 void event_handler_BoutonStopper_Pompe(lv_event_t *e);
 static void slider_event_cb(lv_event_t * );
 
-int TempoMini = 20;
+extern int TempoMini;
 
 extern char Transi_1to0;
 extern char Transi_2to0;
@@ -32,8 +34,8 @@ extern char Minute60Sec ;
 extern int Bouton ;
 extern int Default ;
 
-int A_Effacer = 0 ;
-int Mode_Manuel = 0 ;
+extern int A_Effacer;
+extern int Mode_Manuel;
 
 lv_obj_t * spinner ;
 lv_obj_t * Texte_Marche;
@@ -361,7 +363,7 @@ void event_handler_BoutonActiver_Pompe(lv_event_t *e) {
 			Ecran_Marche();
 		}
 		Run_Pompe_1sec();
-		Allume_Prise();
+		Set_Outlet_ON();
 		Mode_Manuel = 1 ;
 	}
 }
@@ -448,7 +450,7 @@ void event_handler_BoutonStopper_Pompe(lv_event_t *e) {
 			lv_obj_del(spinner) ;
 			A_Effacer = 0 ;
 		}
-		Eteint_Prise();
+		Set_Outlet_OFF();
 		Stop_Pompe_1sec();;
 		Compteur_Marche_Pompe = TempoMini ;
 		Mode_Manuel = 0 ;
@@ -509,7 +511,7 @@ void Bouton1()
 	}
 
 	Run_Pompe_1sec();
-	Allume_Prise();
+	Set_Outlet_ON();
 
 	Mode_Manuel = 1 ;
 	Bouton=0;
@@ -524,7 +526,7 @@ void Bouton2()
 		A_Effacer = 0 ;
 	}
 
-	Eteint_Prise();
+	Set_Outlet_OFF();
 	Stop_Pompe_1sec();;
 
 	Compteur_Marche_Pompe = TempoMini ;

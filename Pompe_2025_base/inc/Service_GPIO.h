@@ -9,7 +9,8 @@
 #define SERVICE_GPIO_H_
 
 void Init_GPIO(void);
-void Allume_Prise(void);
-void Eteint_Prise(void);
+void Set_Outlet_ON(void);
+void Set_Outlet_OFF(void);
+void Toggle_Outlet(void);
 
 #endif /* SERVICE_GPIO_H_ */

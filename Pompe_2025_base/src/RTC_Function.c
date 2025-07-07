@@ -3,16 +3,16 @@
 #include "stm32f7xx_hal.h"
 #include "RTC_Function.h"
 
+#include <Globals.h>
 
-RTC_HandleTypeDef RTC_F746;
+
+extern RTC_HandleTypeDef RTC_F746;
 extern RTC_TimeTypeDef Time_RTCF746;
 extern RTC_DateTypeDef Date_RTCF746;
 
 void RTC_Clock(void) ;
 
 extern void Error_Handler(void);
-
-
 
 
 /*------------------------------------ RTC configuration --------------------------------------*/

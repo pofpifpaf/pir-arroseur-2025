@@ -11,8 +11,8 @@
 #define SENSOR_ON()  (HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET)) // PA2 à 0
 #define SENSOR_OFF() (HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET)) // PA2 à 1
 
-#define LED_ON()     (HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET))
-#define LED_OFF()    (HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET))
+#define LED_ON()     (HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET))
+#define LED_OFF()    (HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET))
 
 #define XBEE_ON()    (HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET)) // A2 à 0
 #define XBEE_OFF()   (HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET))   // A2 à 1

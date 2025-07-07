@@ -110,8 +110,8 @@ int main(void)
   /* ### Indicator light : STM32 is ON ### */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
 
-  //de
-  HAL_Delay(5000);
+  // Delay to wait for the cold start of the Xbee (possibility to reduce it)
+  HAL_Delay(1000);
   Send_Trame(4, DATA_SWITCH, 0, &huart2);
 
 
@@ -135,9 +135,8 @@ int main(void)
       if (isRec && isAck(NUM_CAPTEUR, DATA_SWITCH, rx_data))
       {
     	  LED_ON();
-          Send_Trame(3, DATA_SWITCH, 0, &huart2);
     	  HAL_Delay(1000);
-//    	  LED_OFF();
+    	  LED_OFF();
       }
     }
 
@@ -150,7 +149,8 @@ int main(void)
 
   Send_Trame(6, DATA_SWITCH, 0, &huart2);
 
-//  XBEE_OFF();
+  XBEE_OFF();
+  SENSOR_OFF();
 //  while (1)
 //  {
 //	  Send_Trame(3, DATA_SWITCH, 0, &huart2);

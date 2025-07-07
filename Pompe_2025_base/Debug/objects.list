@@ -228,6 +228,7 @@
 "./src/Ecran/Ecran_Marche.o"
 "./src/Ecran/Ecran_Regle_Heure.o"
 "./src/Ecran/Ecran_Regle_Prog.o"
+"./src/Globals.o"
 "./src/Machine_Etat.o"
 "./src/Prog_Tempo.o"
 "./src/RTC_Function.o"

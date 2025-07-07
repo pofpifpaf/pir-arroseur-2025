@@ -9,7 +9,6 @@
 #include <Service_Timer.h>
 #include <Machine_Etat.h>
 #include "lvgl/lvgl.h"
-#include <Projet.h>
 #include "RTC_Function.h"
 #include <Prog_Tempo.h>
 

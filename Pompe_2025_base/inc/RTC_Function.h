@@ -8,6 +8,8 @@
 #ifndef INC_RTC_FUNCTION_H_
 #define INC_RTC_FUNCTION_H_
 
+#include "stm32f7xx_hal.h"
+
 
 void RTC_CalendarConfig(void);
 void RTC_CalendarShow(uint8_t *, uint8_t *);

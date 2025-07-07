@@ -14,8 +14,7 @@
 #include <Prog_Tempo.h>
 #include "lvgl/lvgl.h"
 
-extern unsigned int Etat;
-extern char Transi_5to0, Transi_0to5, Transi_5to5;
+extern char Transi_5to0, Transi_5to5;
 extern char Num_Prog_Courant;
 extern Data_Prog_Typedef Data_Prog;
 
